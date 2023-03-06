@@ -64,11 +64,7 @@ class LeafletMap {
                         //Leaflet has to take control of projecting points. Here we are feeding the latitude and longitude coordinates to
                         //leaflet so that it can project them on the coordinates of the view. Notice, we have to reverse lat and lon.
                         //Finally, the returned conversion produces an x and y point. We have to select the the desired one using .x or .y
-                        .attr("cx", function(d){
-                          console.log(d)
-                          return vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x
-
-                        })
+                        .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
                         .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y) 
                         .attr("r", 3)
                         .on('mouseover', function(event,d) { //function to add mouseover event
@@ -82,7 +78,7 @@ class LeafletMap {
                                 .style('opacity', 1)
                                 .style('z-index', 1000000)
                                   // Format number with million and thousand separator
-                                .html(`<div class="tooltip-label">City: ${d.city}, population ${d3.format(',')(d.population)}</div>`);
+                                .html(`<div class="tooltip-label">City: ${d.DESCRIPTION}, ${d.ADDRESS}, ${d.SERVICE_NAME}, ${d.REQUESTED_DATETIME}</div>`);
 
                           })
                         .on('mousemove', (event) => {
