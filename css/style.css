@@ -1,8 +1,15 @@
+/* Set height and width for map and map container */
 #my-map {
   width: 100%;
+  height: 455px;
+}
+#my-map-container {
+  width: 50%;
   height: 500px;
+  margin-bottom: 5px;
 }
 
+/* Set tool tip style */
 #tooltip {
   position: absolute;
   opacity: 0;
@@ -18,3 +25,162 @@
   font-size: 10px;
   color: #888;
 }
+
+/* Set horizontal divider style */
+hr.rounded {
+  border-top: 5px solid #e52000;
+  border-radius: 3px;
+}
+
+/* Align title and reset button */
+.top-container, .title-container {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* set width for title and reset button */
+.top-container {
+     width: 33.33%;
+       margin: 0 auto;
+}
+.title-container {
+     width: 33.33%;
+       margin: 0 auto;
+}
+
+/* Set width for timeline */
+
+.timeline-container {
+  width: 33.33%;
+  margin: 0 auto;
+}
+
+/* Reset button style */
+.button {
+  background-color: #d2d2d2;
+  border-color: #495057;
+  color: #495057;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 28px;
+  margin-top: 20px;
+  border-radius: 25%;
+  font-family: "system-ui";
+}
+.button:hover {
+  filter: brightness(60%);
+}
+
+/* Vertical divider style */
+.line-divider {
+  height: 46vh;
+  width: 8px;
+  background-color: #e52000;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+/* Align first row of components */
+#my-map-container, .timeline-container, .line-divider {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* Dropdown style */
+#dropdown {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #d2d2d259;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  width: 165px;
+  margin-bottom: 20px;
+  font-family: system-ui;
+}
+
+/* Legend */
+.legend {
+  margin: 20px 0;
+  list-style: none;
+  padding: 0;
+}
+.legend-btn {
+  display: inline-block;
+  margin: 0 20px 0 0;
+  cursor: pointer;
+  transition: all ease-in-out 200ms;
+}
+.legend-btn:hover.legend-btn.inactive:hover  {
+  /*opacity: 1.0;*/
+}
+.legend-btn.inactive {
+  opacity: 0.3;
+}
+.legend-symbol {
+  width: 12px;
+  height: 12px;
+  margin-right: 3px;
+  display: inline-block;
+}
+.legend-btn[category="bld"] .legend-symbol {
+  background: #4e79a7;
+}
+.legend-btn[category="pothole"] .legend-symbol {
+  background: #f28e2c;
+}
+.legend-btn[category="street"] .legend-symbol {
+  background: #e15759;
+}
+.legend-btn[category="trash"] .legend-symbol {
+  background: #76b7b2;
+}
+.legend-btn[category="recyc"] .legend-symbol {
+  background: #59a14f;
+}
+.legend-btn[category="special"] .legend-symbol {
+  background: #edc949;
+}
+.legend-btn[category="signage"] .legend-symbol {
+  background: #af7aa1;
+}
+.legend-btn[category="metal"] .legend-symbol {
+  background: #ff9da7;
+}
+.legend-btn[category="animal"] .legend-symbol {
+  background: #9c755f;
+}
+.legend-btn[category="other"] .legend-symbol {
+  background: #bab0ab;
+}
+
+/* Legend 2 */
+.option2-legend {
+      height: 50px;
+      width: 300px;
+      margin: 10px;
+      background: linear-gradient(to right, #036d3a, #f9f7ae, #a50026);
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .option2-legend-text {
+      font-size: 18px;
+      font-weight: bold;
+      margin: auto 10px;
+      color: #555;
+    }
+    .option2-legend-min {
+      font-size: 14px;
+      margin: auto 0;
+      color: #777;
+    }
+    .option2-legend-max {
+      font-size: 14px;
+      margin: auto 0;
+      color: #777;
+    }
