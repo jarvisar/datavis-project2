@@ -2,6 +2,9 @@
 var globalData =[];
 let data;
 let map;
+let background_Url = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
+let background_Attr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
 
 //Data is split into 2 files to reduce file size for GitHub upload. 
 //Read first half:
@@ -14,6 +17,7 @@ d3.csv('data/311_data_pt_1.csv')
           d.longitude = +d.LONGITUDE; //make sure these are not strings
           d.mapColor = "#4682b4"
           d.dateDif = dateDiffInDays(d.REQUESTED_DATETIME,d.UPDATED_DATETIME)
+          d.dayOfYear = dayOfTheYear(d.REQUESTED_DATETIME)
       }
       globalData.push(d)
     });
@@ -30,14 +34,22 @@ d3.csv('data/311_data_pt_1.csv')
         d.longitude = +d.LONGITUDE; //make sure these are not strings
         d.mapColor = "#4682b4"
         d.dateDif = dateDiffInDays(d.REQUESTED_DATETIME,d.UPDATED_DATETIME)
+        d.dayOfYear = dayOfTheYear(d.REQUESTED_DATETIME)
       }
       globalData.push(d)
     });
 
 
     //create the map
-    map = new LeafletMap({parentElement: '#my-map'}, getMapData(data));
+    map = new LeafletMap({parentElement: '#my-map'}, getMapData(data), background_Url, background_Attr);
     updateMapColor();
+
+    //Create Line chart
+    lineChart = new Line({
+      'parentElement': '#timeline',
+      'containerHeight': window.innerHeight/3.5,
+      'containerWidth': window.innerWidth/2.26,
+      }, getLineData(data)); 
 
   })
   .catch(error => console.error(error));
@@ -48,45 +60,79 @@ console.log("Here is the data: ", globalData);
 //Always work with "data" object now, unless resetting to original data set (globalData)
 data = globalData;
 
-//set function of map dropdown
+//set function of map color dropdown
 d3.select("#dropdown").on("change", updateMapColor);
+
+//set function of map type dropdown
+d3.select("#dropdown2").on("change", updateMapType);
 
 //set call type legend functionality
 d3.selectAll('.legend-btn').on('click', function() {
       // Toggle 'inactive' class
       d3.select(this).classed('inactive', !d3.select(this).classed('inactive'));
+      var val = document.getElementById("dropdown").value;
 
       // Check which categories are active
       let selectedCategory = [];
       d3.selectAll('.legend-btn:not(.inactive)').each(function() {
-        if(d3.select(this).attr('category') == "bld"){
+        if(d3.select(this).attr('category') == "bld" && val == "option1"){
           selectedCategory.push("#4e79a7");
         }
-        else if(d3.select(this).attr('category') == "pothole"){
+        else if(d3.select(this).attr('category') == "pothole"  && val == "option1"){
           selectedCategory.push("#f28e2c");
         }
-        else if(d3.select(this).attr('category') == "street"){
+        else if(d3.select(this).attr('category') == "street"  && val == "option1"){
           selectedCategory.push("#e15759");
         }
-        else if(d3.select(this).attr('category') == "trash"){
+        else if(d3.select(this).attr('category') == "trash"  && val == "option1"){
           selectedCategory.push("#76b7b2");
         }
-        else if(d3.select(this).attr('category') == "recyc"){
+        else if(d3.select(this).attr('category') == "recyc"  && val == "option1"){
           selectedCategory.push("#59a14f");
         }
-        else if(d3.select(this).attr('category') == "special"){
+        else if(d3.select(this).attr('category') == "special"  && val == "option1"){
           selectedCategory.push("#edc949");
         }
-        else if(d3.select(this).attr('category') == "signage"){
+        else if(d3.select(this).attr('category') == "signage" && val == "option1"){
           selectedCategory.push("#af7aa1");
         }
-        else if(d3.select(this).attr('category') == "metal"){
+        else if(d3.select(this).attr('category') == "metal"  && val == "option1"){
           selectedCategory.push("#ff9da7");
         }
-        else if(d3.select(this).attr('category') == "animal"){
+        else if(d3.select(this).attr('category') == "animal"  && val == "option1"){
           selectedCategory.push("#9c755f");
         }
-        else if(d3.select(this).attr('category') == "other"){
+        else if(d3.select(this).attr('category') == "other"  && val == "option1"){
+          selectedCategory.push("#bab0ab");
+        }
+        else if(d3.select(this).attr('category') == "water" && val == "option4"){
+          selectedCategory.push("#4e79a7");
+        }
+        else if(d3.select(this).attr('category') == "build" && val == "option4"){
+          selectedCategory.push("#f28e2c");
+        }
+        else if(d3.select(this).attr('category') == "health" && val == "option4"){
+          selectedCategory.push("#e15759");
+        }
+        else if(d3.select(this).attr('category') == "manager" && val == "option4"){
+          selectedCategory.push("#76b7b2");
+        }
+        else if(d3.select(this).attr('category') == "trans" && val == "option4"){
+          selectedCategory.push("#59a14f");
+        }
+        else if(d3.select(this).attr('category') == "fire" && val == "option4"){
+          selectedCategory.push("#edc949");
+        }
+        else if(d3.select(this).attr('category') == "park" && val == "option4"){
+          selectedCategory.push("#af7aa1");
+        }
+        else if( d3.select(this).attr('category') == "public" && val == "option4"){
+          selectedCategory.push("#ff9da7");
+        }
+        else if(d3.select(this).attr('category') == "law" && val == "option4"){
+          selectedCategory.push("#9c755f");
+        }
+        else if(d3.select(this).attr('category') == "other2" && val == "option4"){
           selectedCategory.push("#bab0ab");
         }
       });
@@ -100,6 +146,8 @@ d3.selectAll('.legend-btn').on('click', function() {
       map.updateVis();
 
     });
+
+
 
 
 
@@ -124,11 +172,23 @@ function resetCharts(){
     const dropdown = document.getElementById("dropdown");
     dropdown.value = "option1";
 
+    const dropdown2 = document.getElementById("dropdown2");
+    dropdown2.value = "option1";
+
     //set legend
     document.getElementById("option1-legend").style.display = "inline-block";
     document.getElementById("option2-legend").style.display = "none";
+    document.getElementById("option3-legend").style.display = "none";
+    document.getElementById("option4-legend").style.display = "none";
 
-    //reset map
+    //reset backfround
+    background_1_Url = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
+    background_1_Attr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+    map.background_Url = background_1_Url
+    map.background_Attr = background_1_Attr
+
+    //reset map -- update vis is always called when the color is updated
     updateMapColor();
 
     //TO-DO
@@ -146,6 +206,8 @@ function updateMapColor(){
     if(dropdownValue == "option1"){
       document.getElementById("option1-legend").style.display = "inline-block";
       document.getElementById("option2-legend").style.display = "none";
+      document.getElementById("option3-legend").style.display = "none";
+      document.getElementById("option4-legend").style.display = "none";
       //Call type
       for(var obj in thisData){
         if(data[obj].latitude != null){
@@ -200,6 +262,9 @@ function updateMapColor(){
       //time between
       document.getElementById("option1-legend").style.display = "none";
       document.getElementById("option2-legend").style.display = "inline-block";
+      document.getElementById("option3-legend").style.display = "none";
+      document.getElementById("option4-legend").style.display = "none";
+
 
       var max = 30;
       var min = 0;
@@ -223,20 +288,120 @@ function updateMapColor(){
 
     }
     else if(dropdownValue == "option3"){
+      //time of year
       document.getElementById("option1-legend").style.display = "none";
       document.getElementById("option2-legend").style.display = "none";
-      //time of year
-    //TO-DO
+      document.getElementById("option3-legend").style.display = "inline-block";
+      document.getElementById("option4-legend").style.display = "none";
+
+
+      //order it randomly so not all the new dates are plotted first then covered by older dates
+      thisData.sort(function(x, y){
+         return d3.ascending(x.SERVICE_CODE, y.SERVICE_CODE);
+      })
+
+      var max = 365;
+      var min = 0;
+      // Define the D3 color scale using the Red-Yellow-Green color scale
+
+      const colorScale = d3.scaleSequential()
+        .interpolator(d3.interpolateRainbow)
+        .domain([min, max]);
+
+
+
+      for(var obj in thisData){
+        var dayOfYear = thisData[obj].dayOfYear
+        if(dayOfYear > max){
+          dayOfYear = max;
+        }
+        if(dayOfYear < min){
+          dayOfYear = min;
+        }
+        thisData[obj].mapColor = colorScale(dayOfYear)
+        returnData.push(thisData[obj])
+      }
     }
     else if(dropdownValue == "option4"){
       document.getElementById("option1-legend").style.display = "none";
       document.getElementById("option2-legend").style.display = "none";
+      document.getElementById("option3-legend").style.display = "none";
+      document.getElementById("option4-legend").style.display = "inline-block";
       //agency
-    //TO-DO
+      for(var obj in thisData){
+        if(data[obj].latitude != null){
+          colors = ["#4e79a7","#f28e2c","#e15759","#76b7b2","#59a14f","#edc949","#af7aa1","#ff9da7","#9c755f","#bab0ab"]
+
+          
+          if(thisData[obj].AGENCY_RESPONSIBLE.includes("Water Works") ){
+            //Cin Water Works
+            thisData[obj].mapColor = colors[0]
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Building Dept")){
+            //Cinc Building Dept
+            thisData[obj].mapColor = colors[1]
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Health Dept") ){
+            //Cinc Health Dept
+            thisData[obj].mapColor = colors[2]
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Manager's") ){
+            //City Manager's Office
+            thisData[obj].mapColor = colors[3]
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Trans and Eng")){
+            //Dept of Trans and Eng
+            thisData[obj].mapColor = colors[4]
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Fire") || thisData[obj].AGENCY_RESPONSIBLE.includes("Police")){
+            //Fire and Police Department
+            thisData[obj].mapColor = colors[5]
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Park Department")){
+            //Park Department
+            thisData[obj].mapColor = colors[6]
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Public Services")){
+            //Public Services
+            thisData[obj].mapColor = colors[7]
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Law Department") ){
+            //Law Department
+            thisData[obj].mapColor = colors[8]
+          }
+          else{
+            //Other
+            thisData[obj].mapColor = colors[9]
+          }
+          returnData.push(thisData[obj])
+        }
+      }
     }
 
     data = returnData;
     map.data = returnData;
+    map.updateVis();
+  }
+
+  function updateMapType(){
+    //areial background
+    background_1_Url = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
+    background_1_Attr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+    //satelite background
+    background_2_Url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+    background_2_Attr = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
+
+    if(background_Url == background_1_Url){
+      background_Url = background_2_Url
+      background_Attr =  background_2_Attr
+    }
+    else{
+      background_Url = background_1_Url
+      background_Attr =  background_1_Attr
+    }
+    map.background_Url = background_Url
+    map.background_Attr = background_Attr
     map.updateVis();
   }
 
@@ -252,4 +417,63 @@ function updateMapColor(){
   const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
   return diffDays;
+}
+
+function dayOfTheYear(dateString){
+  const date = new Date(dateString);
+  const startOfYear = new Date(date.getFullYear(), 0, 0);
+  const diff = date - startOfYear;
+  const oneDay = 1000 * 60 * 60 * 24;
+  const dayOfYear = Math.floor(diff / oneDay);
+  return dayOfYear;
+}
+
+function getLineData(thisData){
+    //console.log(data)
+    //lets compute costs per year for the line chart
+    
+    let requestsPerDay = [];
+    for(var i = 0; i < 731; i++){
+      requestsPerDay.push( {"day": i, "num":0});
+    }
+    /*let minDay = daySince2017("1/1/2022");
+    let maxDay = d3.max( data, d => daySince2017(d.REQUESTED_DATETIME));
+    for(let i = minDay; i <= maxDay; i++){
+      var thisLoopData = thisData
+      justThisDay = thisLoopData.filter( d => daySince2017(d.REQUESTED_DATETIME) == i ); //only include the selected year
+      requestsPerDay.push( {"day": i, "num":justThisDay.length});
+    }
+    console.log(requestsPerDay)*/
+
+    for(var obj in thisData){
+      var thisDate = new Date(thisData[obj].REQUESTED_DATETIME)
+      var startDate = new Date(2022, 0, 0);
+      var startDate2 = new Date(2021, 0, 0);
+      if(thisDate - startDate > 0){
+        requestsPerDay[365 + thisData[obj].dayOfYear].num++;
+      }
+      else if(thisDate - startDate2 > 0){
+        requestsPerDay[thisData[obj].dayOfYear].num++;
+      }
+    }
+    return requestsPerDay
+  }
+
+  function updateFromLine(date1,date2){
+      //console.log("line")
+        let min = Math.trunc(Math.round(parseFloat(date1)* 10)/10)
+        let max = Math.trunc(Math.round(parseFloat(date2) * 10)/10)
+        lineData = data;
+        lineData = lineData.filter(d => d.REQUESTED_DATETIME >= min)
+        lineData = lineData.filter(d => d.REQUESTED_DATETIME <= max)
+        //ToDO
+  }
+
+function daySince2017(dateString){
+  const date = new Date(dateString);
+  const startOfYear = new Date(2017, 0, 0);
+  const diff = date - startOfYear;
+  const oneDay = 1000 * 60 * 60 * 24;
+  const dayOfYear = Math.floor(diff / oneDay);
+  return dayOfYear;
 }

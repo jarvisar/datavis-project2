@@ -5,11 +5,13 @@ class LeafletMap {
    * @param {Object}
    * @param {Array}
    */
-  constructor(_config, _data) {
+  constructor(_config, _data,_background_Url, _background_Attr) {
     this.config = {
       parentElement: _config.parentElement,
     }
     this.data = _data;
+    this.background_Url = _background_Url
+    this.background_Attr = _background_Attr
     this.initVis();
   }
   
@@ -144,8 +146,6 @@ class LeafletMap {
 
   updateVis() {
     let vis = this;
-    console.log("updating...")
-    console.log(vis.data)
     //want to see how zoomed in you are? 
     // console.log(vis.map.getZoom()); //how zoomed am I
     
@@ -158,8 +158,24 @@ class LeafletMap {
     //   radiusSize = desiredMetersForPoint / metresPerPixel;
     // }
    
-   //redraw based on new zoom- need to recalculate on-screen position
-     //these are the city locations, displayed as a set of dots 
+   //update background:
+    vis.base_layer = L.tileLayer(vis.background_Url, {
+      id: 'new-background',
+      attribution: vis.background_Attr,
+      ext: 'png'
+    });
+
+    //delete the old background
+    vis.theMap.eachLayer(function (layer) {
+      if(layer.url != null){
+        vis.theMap.removeLayer(layer);
+      }
+    });
+
+  vis.theMap.addLayer(vis.base_layer);
+  vis.Dots.attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
+                    .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
+    //redraw dots with correct position and map color
     vis.Dots = vis.svg.selectAll('circle')
                     .data(vis.data) 
                     .join('circle')
