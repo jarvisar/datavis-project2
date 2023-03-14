@@ -103,6 +103,7 @@ class LeafletMap {
 
                             //create a tool tip
                             d3.select('#tooltip')
+                                .style("display","block")
                                 .style('opacity', 1)
                                 .style('z-index', 1000000)
                                   // Format number with million and thousand separator

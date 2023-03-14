@@ -360,13 +360,23 @@ class Line {
       vis.selectedDomain = selection.map(vis.xScaleContext.invert, vis.xScaleContext);
       // Update x-scale of the focus view accordingly
       vis.xScaleFocus.domain(vis.selectedDomain);
-      //updateFromLine(selectedDomain[0],selectedDomain[1])
+      var yData = vis.data
+      var yMax = 0;
+      for(var i = Math.floor(vis.selectedDomain[0]); i < vis.selectedDomain[1]; i++){
+        if(yData[i].num>yMax){
+          yMax = yData[i].num
+        }
+      } 
+      vis.yScaleFocus.domain([0,yMax]);
       
 
     } else {
       // Reset x-scale of the focus view (full time period)
         vis.selectedDomain = vis.xScaleContext.domain()
       vis.xScaleFocus.domain(vis.xScaleContext.domain());
+
+      vis.selectedRange = vis.yContext.domain()
+      vis.yScaleFocus.domain(vis.xContext.domain());
     }
 
     // Redraw line and update x-axis labels in focus view
@@ -382,5 +392,6 @@ class Line {
         .attr('d', vis.focusArea)
 
     vis.xAxisFocusG.call(vis.xAxisFocus);
+    vis.yAxisFocusG.call(vis.yAxisFocus);
   }
 }

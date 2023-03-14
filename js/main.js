@@ -4,7 +4,7 @@ let data;
 let map;
 let background_Url = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
 let background_Attr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-
+let daysOfTheWeek, lineChart, agencyChart, zipChart;
 
 //Data is split into 2 files to reduce file size for GitHub upload. 
 //Read first half:
@@ -16,9 +16,15 @@ d3.csv('data/311_data_pt_1.csv')
           d.latitude = +d.LATITUDE; //make sure these are not strings
           d.longitude = +d.LONGITUDE; //make sure these are not strings
           d.mapColor = "#4682b4"
-          d.dateDif = dateDiffInDays(d.REQUESTED_DATETIME,d.UPDATED_DATETIME)
-          d.dayOfYear = dayOfTheYear(d.REQUESTED_DATETIME)
       }
+      d.dateDif = dateDiffInDays(d.REQUESTED_DATETIME,d.UPDATED_DATETIME)
+      if(d.dateDif > 30){
+        d.dateDifHist = 30
+      }
+      else{
+        d.dateDifHist = d.dateDif
+      }
+      d.dayOfYear = dayOfTheYear(d.REQUESTED_DATETIME)
       globalData.push(d)
     });
 
@@ -33,9 +39,16 @@ d3.csv('data/311_data_pt_1.csv')
         d.latitude = +d.LATITUDE; //make sure these are not strings
         d.longitude = +d.LONGITUDE; //make sure these are not strings
         d.mapColor = "#4682b4"
-        d.dateDif = dateDiffInDays(d.REQUESTED_DATETIME,d.UPDATED_DATETIME)
-        d.dayOfYear = dayOfTheYear(d.REQUESTED_DATETIME)
+        
       }
+      d.dateDif = dateDiffInDays(d.REQUESTED_DATETIME,d.UPDATED_DATETIME)
+      if(d.dateDif > 30){
+        d.dateDifHist = 30
+      }
+      else{
+        d.dateDifHist = d.dateDif
+      }
+      d.dayOfYear = dayOfTheYear(d.REQUESTED_DATETIME)
       globalData.push(d)
     });
 
@@ -47,9 +60,43 @@ d3.csv('data/311_data_pt_1.csv')
     //Create Line chart
     lineChart = new Line({
       'parentElement': '#timeline',
-      'containerHeight': window.innerHeight/3.5,
+      'containerHeight': window.innerHeight/4.5,
       'containerWidth': window.innerWidth/2.26,
       }, getLineData(data)); 
+
+    //Create days of the week chart:
+    daysOfTheWeek = new DaysOfTheWeek({
+      'parentElement': '#daysOfTheWeek',
+      'containerHeight': window.innerHeight/2.7,
+      'containerWidth': window.innerWidth/3.8,
+      }, getDayOfWeekData(data),(filterData) => {
+        //TO-DO
+    }); 
+
+    //Create Agency chart
+    agencyChart = new AgencyType({
+      'parentElement': '#agency',
+      'containerHeight': window.innerHeight/2.7,
+      'containerWidth': window.innerWidth/3.8,
+      }, getAgency(data),(filterData) => {
+        //TO-DO
+    }); 
+
+    //Create histogram
+    histogram = new Histogram({
+      'parentElement': '#histogram',
+      'containerHeight': window.innerHeight/4.5,
+      'containerWidth': window.innerWidth/2.26,
+      }, data); 
+
+    //Create Zipcode chart
+    zipChart = new Zipcode({
+      'parentElement': '#zipcode',
+      'containerHeight': window.innerHeight/2.7,
+      'containerWidth': window.innerWidth/2.13,
+      }, getZip(data),(filterData) => {
+        //TO-DO
+    }); 
 
   })
   .catch(error => console.error(error));
@@ -138,9 +185,7 @@ d3.selectAll('.legend-btn').on('click', function() {
       });
       
       var returnData = data;
-      console.log(selectedCategory)
       returnData = returnData.filter(d => selectedCategory.includes(d.mapColor));
-      console.log(returnData)
       // Filter data accordingly and update vis
       map.data = returnData;
       map.updateVis();
@@ -436,14 +481,6 @@ function getLineData(thisData){
     for(var i = 0; i < 731; i++){
       requestsPerDay.push( {"day": i, "num":0});
     }
-    /*let minDay = daySince2017("1/1/2022");
-    let maxDay = d3.max( data, d => daySince2017(d.REQUESTED_DATETIME));
-    for(let i = minDay; i <= maxDay; i++){
-      var thisLoopData = thisData
-      justThisDay = thisLoopData.filter( d => daySince2017(d.REQUESTED_DATETIME) == i ); //only include the selected year
-      requestsPerDay.push( {"day": i, "num":justThisDay.length});
-    }
-    console.log(requestsPerDay)*/
 
     for(var obj in thisData){
       var thisDate = new Date(thisData[obj].REQUESTED_DATETIME)
@@ -469,11 +506,132 @@ function getLineData(thisData){
         //ToDO
   }
 
-function daySince2017(dateString){
-  const date = new Date(dateString);
-  const startOfYear = new Date(2017, 0, 0);
-  const diff = date - startOfYear;
-  const oneDay = 1000 * 60 * 60 * 24;
-  const dayOfYear = Math.floor(diff / oneDay);
-  return dayOfYear;
-}
+//Function to get day of week data
+function getDayOfWeekData(thisData){
+    var returnData = []
+    returnData.push({"day":"Monday","count":0})
+    returnData.push({"day":"Tuesday","count":0})
+    returnData.push({"day":"Wednesday","count":0})
+    returnData.push({"day":"Thursday","count":0})
+    returnData.push({"day":"Friday","count":0})
+    returnData.push({"day":"Saturday","count":0})
+    returnData.push({"day":"Sunday","count":0})
+
+    for(let i = 0; i <= 6; i++){
+
+      let justThisDay = data.filter( d => getDay(d.REQUESTED_DATETIME) == i );
+      returnData[i].count = justThisDay.length
+    }
+    return returnData
+  }
+
+  function getDay(dateStr){
+    const date = new Date(dateStr);
+    const dayOfWeek = date.getDay();
+    // Convert Sunday (0) to 6 and shift all other days by 1
+    const shiftedDayOfWeek = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    return shiftedDayOfWeek
+  }
+
+  //Function to get agency data
+  function getAgency(thisData){
+    var returnData = []
+    returnData.push({"agency":"Water Works","count":0})
+    returnData.push({"agency":"Building Deptartment","count":0})
+    returnData.push({"agency":"Health Deptartment","count":0})
+    returnData.push({"agency":"Manager's Office","count":0})
+    returnData.push({"agency":"Deptartment of Transportation","count":0})
+    returnData.push({"agency":"Fire and Police Deptartment","count":0})
+    returnData.push({"agency":"Park Deptartment","count":0})
+    returnData.push({"agency":"Public Services","count":0})
+    returnData.push({"agency":"Law Deptartment","count":0})
+    returnData.push({"agency":"Other","count":0})
+
+    for(var obj in thisData){
+          colors = ["#4e79a7","#f28e2c","#e15759","#76b7b2","#59a14f","#edc949","#af7aa1","#ff9da7","#9c755f","#bab0ab"]
+
+          
+          if(thisData[obj].AGENCY_RESPONSIBLE.includes("Water Works") ){
+            //Cin Water Works
+            returnData[0].count++
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Building Dept")){
+            //Cinc Building Dept
+            returnData[1].count++
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Health Dept") ){
+            //Cinc Health Dept
+            returnData[2].count++
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Manager's") ){
+            //City Manager's Office
+            returnData[3].count++
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Trans and Eng")){
+            //Dept of Trans and Eng
+            returnData[4].count++
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Fire") || thisData[obj].AGENCY_RESPONSIBLE.includes("Police")){
+            //Fire and Police Department
+            returnData[5].count++
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Park Department")){
+            //Park Department
+            returnData[6].count++
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Public Services")){
+            //Public Services
+            returnData[7].count++
+          }
+          else if(thisData[obj].AGENCY_RESPONSIBLE.includes("Law Department") ){
+            //Law Department
+            returnData[8].count++
+          }
+          else{
+            //Other
+            returnData[9].count++
+          }        
+      }
+    return returnData.reverse()
+  }
+
+  //Zipcode Data
+  function getZip(thisData){
+    var returnData = []
+    returnData.push({"zip":"45202","count":0})
+    returnData.push({"zip":"45203","count":0})
+    returnData.push({"zip":"45204","count":0})
+    returnData.push({"zip":"45205","count":0})
+    returnData.push({"zip":"45206","count":0})
+    returnData.push({"zip":"45207","count":0})
+    returnData.push({"zip":"45208","count":0})
+    returnData.push({"zip":"45209","count":0})
+    returnData.push({"zip":"45211","count":0})
+    returnData.push({"zip":"45212","count":0})
+    returnData.push({"zip":"45213","count":0})
+    returnData.push({"zip":"45214","count":0})
+    returnData.push({"zip":"45215","count":0})
+    returnData.push({"zip":"45216","count":0})
+    returnData.push({"zip":"45217","count":0})
+    returnData.push({"zip":"45219","count":0})
+    returnData.push({"zip":"45220","count":0})
+    returnData.push({"zip":"45223","count":0})
+    returnData.push({"zip":"45224","count":0})
+    returnData.push({"zip":"45225","count":0})
+    returnData.push({"zip":"45226","count":0})
+    returnData.push({"zip":"45227","count":0})
+    returnData.push({"zip":"45229","count":0})
+    returnData.push({"zip":"45230","count":0})
+    returnData.push({"zip":"45232","count":0})
+    returnData.push({"zip":"45233","count":0})
+    returnData.push({"zip":"45237","count":0})
+    returnData.push({"zip":"45238","count":0})
+    returnData.push({"zip":"45239","count":0})
+    returnData.push({"zip":"45248","count":0})
+
+    for(var obj in returnData){
+      let justThisDay = data.filter( d => d.ZIPCODE == returnData[obj].zip );
+      returnData[obj].count = justThisDay.length
+    }
+    return returnData
+  }
