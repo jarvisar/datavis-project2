@@ -151,7 +151,7 @@ class DaysOfTheWeek {
             .style('opacity', 1)
             .html(`
               <div class="tooltip-title"  style="font-weight: 600;">Day of the Week: ${d}</div>
-              <div style="font-weight: 300;">Number of Calls: ${thisCount}</div>
+              <div style="font-weight: 300;">Calls: ${thisCount}</div>
             `);
                 
 

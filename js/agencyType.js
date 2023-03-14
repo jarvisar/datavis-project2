@@ -128,7 +128,7 @@ class AgencyType {
             .style('top', event.pageY + 'px')
             .html(`
               <div class="tooltip-title" style="font-weight: 600;">Agency: ${d.agency}</div>
-              <div style="font-weight: 600;">Number of Calls: ${d.count}</div>
+              <div >Calls: ${d.count}</div>
             `);
         })
         .on('mouseleave', () => {
