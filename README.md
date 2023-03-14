@@ -17,6 +17,8 @@ This project was developed using primarily JavaScript, HTML, and CSS.
 This project includes the following visualizations:
 
 - Leaflet Map: Users can view and interact with a map displaying individual 311 calls as markers.
+- Line chart: Users can view and interact with a timeline of 311 calls by month and time of year.
+
 
 # Usage
 
