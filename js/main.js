@@ -67,7 +67,7 @@ d3.csv('data/311_data_pt_2.csv')
     //Create Line chart
     lineChart = new Line({
       'parentElement': '#timeline',
-      'containerHeight': window.innerHeight/4.5,
+      'containerHeight': window.innerHeight/4,
       'containerWidth': window.innerWidth/2.26,
       }, getLineData(data)); 
 
@@ -92,7 +92,7 @@ d3.csv('data/311_data_pt_2.csv')
     //Create histogram
     histogram = new Histogram({
       'parentElement': '#histogram',
-      'containerHeight': window.innerHeight/4.5,
+      'containerHeight': window.innerHeight/4,
       'containerWidth': window.innerWidth/2.26,
       }, data); 
 
