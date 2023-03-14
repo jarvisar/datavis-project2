@@ -6,7 +6,6 @@ let background_Url = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/
 let background_Attr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 let daysOfTheWeek, lineChart, agencyChart, zipChart;
 
-
 //Data is split into 2 files to reduce file size for GitHub upload. 
 //Read first half:
 d3.csv('data/311_data_pt_1.csv')
@@ -78,6 +77,14 @@ d3.csv('data/311_data_pt_2.csv')
       'containerWidth': window.innerWidth/3.8,
       }, getDayOfWeekData(data),(filterData) => {
         //TO-DO
+        // filter data to only include the selected day of the week
+        // Filter the data to only include items with the desired weekday
+        const filteredData = data.filter(item => {
+          const dayOfWeek = getDay(item.REQUESTED_DATETIME);
+          const weekdayName = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][dayOfWeek];
+          return weekdayName === filterData;
+        });
+        updateCharts(filteredData);
     }); 
 
     //Create Agency chart
@@ -123,99 +130,110 @@ d3.select("#map-layer-dropdown").on("change", updateMapType);
 
 //set call type legend functionality
 d3.selectAll('.legend-btn').on('click', function() {
-      // Toggle 'inactive' class
-      d3.select(this).classed('inactive', !d3.select(this).classed('inactive'));
-      var val = document.getElementById("dropdown").value;
+  // Toggle 'inactive' class
+  d3.select(this).classed('inactive', !d3.select(this).classed('inactive'));
+  var val = document.getElementById("dropdown").value;
 
-      // Check which categories are active
-      let selectedCategory = [];
-      d3.selectAll('.legend-btn:not(.inactive)').each(function() {
-        if(d3.select(this).attr('category') == "bld" && val == "option1"){
-          selectedCategory.push("#4e79a7");
-        }
-        else if(d3.select(this).attr('category') == "pothole"  && val == "option1"){
-          selectedCategory.push("#f28e2c");
-        }
-        else if(d3.select(this).attr('category') == "street"  && val == "option1"){
-          selectedCategory.push("#e15759");
-        }
-        else if(d3.select(this).attr('category') == "trash"  && val == "option1"){
-          selectedCategory.push("#76b7b2");
-        }
-        else if(d3.select(this).attr('category') == "recyc"  && val == "option1"){
-          selectedCategory.push("#59a14f");
-        }
-        else if(d3.select(this).attr('category') == "special"  && val == "option1"){
-          selectedCategory.push("#edc949");
-        }
-        else if(d3.select(this).attr('category') == "signage" && val == "option1"){
-          selectedCategory.push("#af7aa1");
-        }
-        else if(d3.select(this).attr('category') == "metal"  && val == "option1"){
-          selectedCategory.push("#ff9da7");
-        }
-        else if(d3.select(this).attr('category') == "animal"  && val == "option1"){
-          selectedCategory.push("#9c755f");
-        }
-        else if(d3.select(this).attr('category') == "other"  && val == "option1"){
-          selectedCategory.push("#bab0ab");
-        }
-        else if(d3.select(this).attr('category') == "water" && val == "option4"){
-          selectedCategory.push("#4e79a7");
-        }
-        else if(d3.select(this).attr('category') == "build" && val == "option4"){
-          selectedCategory.push("#f28e2c");
-        }
-        else if(d3.select(this).attr('category') == "health" && val == "option4"){
-          selectedCategory.push("#e15759");
-        }
-        else if(d3.select(this).attr('category') == "manager" && val == "option4"){
-          selectedCategory.push("#76b7b2");
-        }
-        else if(d3.select(this).attr('category') == "trans" && val == "option4"){
-          selectedCategory.push("#59a14f");
-        }
-        else if(d3.select(this).attr('category') == "fire" && val == "option4"){
-          selectedCategory.push("#edc949");
-        }
-        else if(d3.select(this).attr('category') == "park" && val == "option4"){
-          selectedCategory.push("#af7aa1");
-        }
-        else if( d3.select(this).attr('category') == "public" && val == "option4"){
-          selectedCategory.push("#ff9da7");
-        }
-        else if(d3.select(this).attr('category') == "law" && val == "option4"){
-          selectedCategory.push("#9c755f");
-        }
-        else if(d3.select(this).attr('category') == "other2" && val == "option4"){
-          selectedCategory.push("#bab0ab");
-        }
-      });
-      
-      var returnData = data;
-      returnData = returnData.filter(d => selectedCategory.includes(d.mapColor));
-      // Filter data accordingly and update vis
-      map.data = returnData;
-      map.updateVis();
+  // Check which categories are active
+  let selectedCategory = [];
+  d3.selectAll('.legend-btn:not(.inactive)').each(function() {
+    if(d3.select(this).attr('category') == "bld" && val == "option1"){
+      selectedCategory.push("#4e79a7");
+    }
+    else if(d3.select(this).attr('category') == "pothole"  && val == "option1"){
+      selectedCategory.push("#f28e2c");
+    }
+    else if(d3.select(this).attr('category') == "street"  && val == "option1"){
+      selectedCategory.push("#e15759");
+    }
+    else if(d3.select(this).attr('category') == "trash"  && val == "option1"){
+      selectedCategory.push("#76b7b2");
+    }
+    else if(d3.select(this).attr('category') == "recyc"  && val == "option1"){
+      selectedCategory.push("#59a14f");
+    }
+    else if(d3.select(this).attr('category') == "special"  && val == "option1"){
+      selectedCategory.push("#edc949");
+    }
+    else if(d3.select(this).attr('category') == "signage" && val == "option1"){
+      selectedCategory.push("#af7aa1");
+    }
+    else if(d3.select(this).attr('category') == "metal"  && val == "option1"){
+      selectedCategory.push("#ff9da7");
+    }
+    else if(d3.select(this).attr('category') == "animal"  && val == "option1"){
+      selectedCategory.push("#9c755f");
+    }
+    else if(d3.select(this).attr('category') == "other"  && val == "option1"){
+      selectedCategory.push("#bab0ab");
+    }
+    else if(d3.select(this).attr('category') == "water" && val == "option4"){
+      selectedCategory.push("#4e79a7");
+    }
+    else if(d3.select(this).attr('category') == "build" && val == "option4"){
+      selectedCategory.push("#f28e2c");
+    }
+    else if(d3.select(this).attr('category') == "health" && val == "option4"){
+      selectedCategory.push("#e15759");
+    }
+    else if(d3.select(this).attr('category') == "manager" && val == "option4"){
+      selectedCategory.push("#76b7b2");
+    }
+    else if(d3.select(this).attr('category') == "trans" && val == "option4"){
+      selectedCategory.push("#59a14f");
+    }
+    else if(d3.select(this).attr('category') == "fire" && val == "option4"){
+      selectedCategory.push("#edc949");
+    }
+    else if(d3.select(this).attr('category') == "park" && val == "option4"){
+      selectedCategory.push("#af7aa1");
+    }
+    else if( d3.select(this).attr('category') == "public" && val == "option4"){
+      selectedCategory.push("#ff9da7");
+    }
+    else if(d3.select(this).attr('category') == "law" && val == "option4"){
+      selectedCategory.push("#9c755f");
+    }
+    else if(d3.select(this).attr('category') == "other2" && val == "option4"){
+      selectedCategory.push("#bab0ab");
+    }
+  });
+  
+  var returnData = data;
+  returnData = returnData.filter(d => selectedCategory.includes(d.mapColor));
+  // Filter data accordingly and update vis
+  map.data = returnData;
+  map.updateVis();
 
-    });
-
-
-
-
+});
 
 //Process data for leafletMap
 function getMapData(thisData){
-    let returnData = []
+  let returnData = []
 
-    //Only show items on the map that have a Lat/Lon
-    for(var obj in thisData){
-      if(thisData[obj].latitude != null){
-        returnData.push(thisData[obj])
-      }
+  //Only show items on the map that have a Lat/Lon
+  for(var obj in thisData){
+    if(thisData[obj].latitude != null){
+      returnData.push(thisData[obj])
     }
-    return returnData
   }
+  return returnData
+}
+
+function updateCharts(filteredData){
+  lineChart.data = getLineData(filteredData);
+  zipChart.data = getZip(filteredData);
+  histogram.data = filteredData;
+  agencyChart.data = getAgency(filteredData);
+  daysOfTheWeek.data = getDayOfWeekData(filteredData);
+  map.data = getMapData(filteredData);
+  lineChart.updateVis();
+  zipChart.updateVis();
+  histogram.updateVis();
+  agencyChart.updateVis();
+  daysOfTheWeek.updateVis();
+  map.updateVis();
+}
 
 //function to reset charts to originl data
 function resetCharts(){
@@ -251,11 +269,13 @@ function resetCharts(){
     updateMapColor();
 
     //TO-DO
-
+    updateCharts(data);
     loading.classList.remove("loading");
     return returnData
     }, 100);
   }
+
+
 
   //function to reset charts to originl data
 function updateMapColor(){
@@ -535,7 +555,7 @@ function getDayOfWeekData(thisData){
 
     for(let i = 0; i <= 6; i++){
 
-      let justThisDay = data.filter( d => getDay(d.REQUESTED_DATETIME) == i );
+      let justThisDay = thisData.filter( d => getDay(d.REQUESTED_DATETIME) == i );
       returnData[i].count = justThisDay.length
     }
     return returnData
@@ -646,7 +666,7 @@ function getDayOfWeekData(thisData){
     returnData.push({"zip":"45248","count":0})
 
     for(var obj in returnData){
-      let justThisDay = data.filter( d => d.ZIPCODE == returnData[obj].zip );
+      let justThisDay = thisData.filter( d => d.ZIPCODE == returnData[obj].zip );
       returnData[obj].count = justThisDay.length
     }
     return returnData
