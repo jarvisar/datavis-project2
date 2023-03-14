@@ -198,7 +198,7 @@ vis.tooltipTrackingArea = vis.svg.append('rect')
         })
         .on('mouseleave', () => {
           vis.tooltip.style('display', 'none');
-          d3.select('#tooltip').style('display', 'none');
+          d3.select('#histo-tooltip').style('display', 'none');
         })
         .on('mousemove', function(event) {
           // Get date that corresponds to current mouse x-coordinate
