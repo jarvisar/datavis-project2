@@ -144,8 +144,8 @@ class Zipcode {
     vis.rects = vis.chart.selectAll('rect')
       .data(vis.data)
       .join('rect')
-      .attr('fill', "#ffb1a4")
-      .attr("stroke", "#e52000")
+      .attr('fill', "#073B4C")
+      .attr("stroke", "#0c6b89")
       .attr('id', (d) => {
       return "byPlan" + d.zip}) 
       .attr('x', (d) => {

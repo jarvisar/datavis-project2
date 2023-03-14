@@ -126,8 +126,8 @@ class DaysOfTheWeek {
     vis.rects = vis.chart.selectAll('rect')
       .data(vis.data)
       .join('rect')
-      .attr('fill', "#ffb1a4")
-      .attr("stroke", "#e52000")
+      .attr('fill', "#FFD166")
+      .attr("stroke", "#f0a800")
       .attr('id', (d) => {
       return "byPlan" + d.day}) 
       .attr('x', (d) => {

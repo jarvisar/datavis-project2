@@ -277,8 +277,8 @@ vis.tooltipTrackingArea = vis.svg.append('rect')
 
       .attr("width", function(d) { return vis.x(d.x1) - vis.x(d.x0) ; })
       .attr('height', 0)
-      .attr('fill', "#ffb1a4")
-      .attr("stroke", "#e52000")
+      .attr('fill', "#118AB2")
+      .attr("stroke", "#0b5d78")
 
       vis.mainRects.transition()
         .duration(1000)

@@ -247,7 +247,7 @@ class Line {
     vis.focusLinePath
         .datum(vis.data)
         .attr('class','chart')
-        .attr('stroke',  '#e52000')
+        .attr('stroke',  '#d1123f')
         .attr('stroke-width', 2)
         .attr('fill', 'none')
         .attr('d', vis.lineBase)
@@ -261,7 +261,7 @@ class Line {
         .attr('class','chart')
         .datum(vis.data)
         .attr('class','chart')
-        .attr('fill', '#ffb1a4')
+        .attr('fill', '#EF476F')
         .attr('d', vis.focusAreaBase)
         .attr("clip-path", "url(#clip)")
 

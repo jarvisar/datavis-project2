@@ -106,8 +106,8 @@ class AgencyType {
       .join('rect')
       .attr('class', 'plan')
       .attr('data',(d) => d.agency)
-      .attr('fill', "#ffb1a4")
-      .attr("stroke", "#e52000")
+      .attr('fill', "#06D6A0")
+      .attr("stroke", "#04956f")
       .style("border-left","none")
       .attr('y', (d) => {
         return vis.yScale(d.agency)}) 
