@@ -28,7 +28,7 @@ class Zipcode {
     vis.svg.append("text")
        .attr('transform', `translate(${vis.width/1.80}, ${vis.config.margin.top -20 })`)
        .style("text-anchor", "middle")
-       .text("Calls by Zipcode")
+       .text("Calls by ZIP Code")
        .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "20px");
@@ -37,7 +37,7 @@ class Zipcode {
     vis.svg.append("text")
        .attr("transform", `translate(${vis.width/2},${vis.height + vis.config.margin.bottom + 35})`)
        .style("text-anchor", "start")
-       .text("Day of the Week")
+       .text("ZIP Code")
        .style("font-family", "Roboto")
        .style("color", "black")
        .style("font-size", "14px")
@@ -52,7 +52,8 @@ class Zipcode {
        .append("tspan")
        .style("font-size", "14px")
        .style("fill", "blue")
-       .text("Cincinnati Zipcode Map")
+       .text("Cincinnati ZIP Codes Map")
+        .style("cursor", "pointer")
        .on("click", function() {
             // add the link you want to redirect to when the text is clicked
             window.open("https://www.zipdatamaps.com/zipcodes-cincinnati-oh", "_blank");
