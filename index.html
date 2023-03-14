@@ -30,20 +30,20 @@
         <div id="my-map-container">
             <div id="my-map"></div>
             <div id="legends-container">
-                <p style="font-family: system-ui;margin-left: 15px; margin-top: 10px;align-self: center;color: #e52000; font-weight: 600; display: inline-block; vertical-align: top;"> Color by:
+                <p style="font-family: system-ui;margin-left: 0px; margin-right: 10px;  margin-top: 10px;align-self: center;color: #e52000; font-weight: 600; display: inline-block; vertical-align: top;"> Color by:
                     <select id="dropdown">
                       <option value="option1">Call Type</option>
                       <option value="option2">Response Time</option>
                       <option value="option3">Time of Year</option>
-                      <option value="option3">Responding Agency</option>
+                      <option value="option4">Responding Agency</option>
                     </select>
                 </p> 
                 
-                <div id="option1-legend" style="display: inline-block; width: 76%">
+                <div id="option1-legend" style="display: inline-block; width: 62%">
                     <ul class="legend" style="margin-top: 3px; text-align: center;">
                         <li id = "bld" class="legend-btn" category="bld"><span class="legend-symbol"></span> Building Repair</li>
-                        <li id = "pothole" class="legend-btn" category="pothole"><span class="legend-symbol"></span> Pothole Repair</li>
-                        <li id = "street" class="legend-btn" category="street"><span class="legend-symbol"></span> General Street Repair</li>
+                        <li id = "pothole" class="legend-btn" category="pothole"><span class="legend-symbol"></span> Pothole</li>
+                        <li id = "street" class="legend-btn" category="street"><span class="legend-symbol"></span> General Street</li>
                         <li id = "trash" class="legend-btn" category="trash"><span class="legend-symbol"></span> Trash Collection</li>
                         <li id = "recyc" class="legend-btn" category="recyc"><span class="legend-symbol"></span> Recycling Collection</li>
                         <li id = "special" class="legend-btn" category="special"><span class="legend-symbol"></span> Special Collection</li>
@@ -53,12 +53,48 @@
                         <li id = "other" class="legend-btn" category="other"><span class="legend-symbol"></span> Other</li>       
                     </ul>
                 </div>
-                <div id="option2-legend" style="display: none; width: 75%;">
+                <div id="option2-legend" style="display: none; width: 61%; margin-right: 20px;">
                     <div class="option2-legend"  style="width: 100%; height: 15px;  margin-bottom: 0px;"></div>
                     <p style="width: 44%; font-family: system-ui;margin-left: 15px;margin-top: 2px;display: inline-block;"> 0 Days</p>
-                    <p style="width: 44%; font-family: system-ui;margin-top: 2px;display: inline-block;"> 15 Days</p>
-                    <p style="width: 9%; font-family: system-ui;;margin-top: 2px;display: inline-block;"> 30+ Days</p>
+                    <p style="width: 42%; font-family: system-ui;margin-top: 2px;display: inline-block;"> 15 Days</p>
+                    <p style="width: 10%; font-family: system-ui;;margin-top: 2px;display: inline-block;"> 30+ Days</p>
                 </div>
+                <div id="option3-legend" style="display: none; width: 61%; margin-right:20px">
+                    <div class="option3-legend"  style="width: 100%; height: 15px;  margin-bottom: 0px;"></div>
+                    <p style="width: 8%; font-family: system-ui;margin-left: 15px;margin-top: 2px;display: inline-block;"> Jan</p>
+                    <p style="width: 8%; font-family: system-ui;margin-top: 2px;display: inline-block;"> Feb</p>
+                    <p style="width: 8%; font-family: system-ui;;margin-top: 2px;display: inline-block;"> Mar</p>
+                    <p style="width: 8%; font-family: system-ui;;margin-top: 2px;display: inline-block;"> Apr</p>
+                    <p style="width: 8%; font-family: system-ui;;margin-top: 2px;display: inline-block;"> May</p>
+                    <p style="width: 8%; font-family: system-ui;;margin-top: 2px;display: inline-block;"> June</p>
+                    <p style="width: 8%; font-family: system-ui;;margin-top: 2px;display: inline-block;"> July</p>
+                    <p style="width: 8%; font-family: system-ui;;margin-top: 2px;display: inline-block;"> Aug</p>
+                    <p style="width: 8%; font-family: system-ui;;margin-top: 2px;display: inline-block;"> Sept</p>
+                    <p style="width: 7%; font-family: system-ui;;margin-top: 2px;display: inline-block;"> Oct</p>
+                    <p style="width: 8%; font-family: system-ui;;margin-top: 2px;display: inline-block;"> Nov</p>
+                    <p style="width: 3%; font-family: system-ui;;margin-top: 2px;display: inline-block;"> Dec</p>
+                </div>
+                <div id="option4-legend" style="display: none; width: 62%">
+                    
+                    <ul class="legend4" style="margin-top: 3px; text-align: center;">
+                        <li id = "bld" class="legend-btn" category="water"><span class="legend-symbol"></span> Water Works</li>
+                        <li id = "pothole" class="legend-btn" category="build"><span class="legend-symbol"></span> Building Dept.</li>
+                        <li id = "street" class="legend-btn" category="health"><span class="legend-symbol"></span> Health Dept.</li>
+                        <li id = "trash" class="legend-btn" category="manager"><span class="legend-symbol"></span> Managers Office</li>
+                        <li id = "recyc" class="legend-btn" category="trans"><span class="legend-symbol"></span> Dept. of Transportation</li>
+                        <li id = "special" class="legend-btn" category="fire"><span class="legend-symbol"></span> Fire and Police Dept.</li>
+                        <li id = "signage" class="legend-btn" category="park"><span class="legend-symbol"></span> Park Dept.</li>
+                        <li id = "metal" class="legend-btn" category="public"><span class="legend-symbol"></span> Public Services</li>
+                        <li id = "animal" class="legend-btn" category="law"><span class="legend-symbol"></span> Law Dept.</li>
+                        <li id = "other" class="legend-btn" category="other2"><span class="legend-symbol"></span> Other</li>       
+                    </ul>
+                </div>
+                <p style="font-family: system-ui;margin-left: 10px; margin-top: 10px;align-self: center;color: #e52000; font-weight: 600; display: inline-block; vertical-align: top;"> Background:
+                    <select id="dropdown2">
+                      <option value="option1">Aerial</option>
+                      <option value="option2">Satelite</option>
+                    </select>
+                </p> 
             </div>
 
      
@@ -82,6 +118,7 @@
     <script src="js/leaflet.js"></script>
     <script src="js/main.js"></script>
     <script src="js/leafletMap.js"></script>
+    <script src="js/lineBrush.js"></script>
 
 
 
