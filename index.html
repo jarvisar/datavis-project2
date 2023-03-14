@@ -102,11 +102,25 @@
         <div class="line-divider"></div>
         <div class="timeline-container">
             <svg id="timeline"></svg>
+            <svg id="histogram"></svg>
         </div>
     </div>
 
     <!-- Middle line divider -->
     <hr class="rounded" style="margin-top: 0px;">
+
+    <!-- Bar charts -->
+    <div class="svg-container">
+        <svg id="daysOfTheWeek"></svg>
+        <svg id="agency"></svg>
+        <div class="source">
+            <svg id="zipcode"></svg>
+            <!--<p style="text-align: center; font-family: system-ui">
+            Click to view: <a href="https://www.zipdatamaps.com/zipcodes-cincinnati-oh" target="_blank">Cincinnati Zipcode Map</a>
+            </p> -->
+        </div>
+    </div>
+
     <div id="tooltip"></div>
 
     <!-- D3 bundle -->
@@ -119,6 +133,10 @@
     <script src="js/main.js"></script>
     <script src="js/leafletMap.js"></script>
     <script src="js/lineBrush.js"></script>
+    <script src="js/daysOfTheWeek.js"></script>
+    <script src="js/agencyType.js"></script>
+    <script src="js/HistogramBrush.js"></script>
+    <script src="js/zipcode.js"></script>
 
 
 
