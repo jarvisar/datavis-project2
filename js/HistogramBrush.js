@@ -1,5 +1,5 @@
 class Histogram {
-  constructor(_config, _data) {
+  constructor(_config, _data, _refresh) {
     this.config = {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 500,
@@ -8,7 +8,7 @@ class Histogram {
       contextHeight: 30
     }
     this.data = _data; 
-
+    this.refresh = _refresh
     this.initVis();
   }
   /**
@@ -226,7 +226,8 @@ vis.tooltipTrackingArea = vis.svg.append('rect')
               .attr('transform', `translate(${vis.x(median)}, ${vis.y(thisData2[0].length) + vis.config.margin.top})`)
             }
           }
-        });
+        })
+        
       }
         vis.xAxisG.call(vis.xAxis)
   }

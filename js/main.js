@@ -91,7 +91,7 @@ d3.csv('data/311_data_pt_2.csv')
       'containerHeight': window.innerHeight/2.7,
       'containerWidth': window.innerWidth/3.8,
       }, getAgency(data),(filterData) => {
-        const filteredData = data.filter(item => {
+        let filteredData = data.filter(item => {
           return item.AGENCY_RESPONSIBLE.includes(filterData);
         });
         updateCharts(filteredData);
@@ -110,7 +110,8 @@ d3.csv('data/311_data_pt_2.csv')
       'containerHeight': window.innerHeight/2.7,
       'containerWidth': window.innerWidth/2.13,
       }, getZip(data),(filterData) => {
-        const filteredData = data.filter(item => item.ZIPCODE === filterData);
+        let filteredData = data.filter(item => item.ZIPCODE === filterData);
+        console.log(filteredData)
         updateCharts(filteredData);
     }); 
 
