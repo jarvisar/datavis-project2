@@ -1,6 +1,6 @@
 # Project 2: Who you gonna call? 3-1-1!
 
-Project 2 aims to develop interactive and dynamic maps and data visualizations using 2022 non-emergency 311 call data from the [City of Cincinnati's website](https://data.cincinnati-oh.gov/Thriving-Neighborhoods/Cincinnati-311-Non-Emergency-Service-Requests/4cjh-bm8b/), [Leaflet](https://leafletjs.com/), and [D3.js](https://d3js.org/).
+Project 2 aims to develop interactive and dynamic maps and data visualizations using non-emergency 311 call data from the [City of Cincinnati's website](https://data.cincinnati-oh.gov/Thriving-Neighborhoods/Cincinnati-311-Non-Emergency-Service-Requests/4cjh-bm8b/), [Leaflet](https://leafletjs.com/), and [D3.js](https://d3js.org/).
 
 ## Data
 
