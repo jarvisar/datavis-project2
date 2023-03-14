@@ -119,7 +119,7 @@ data = globalData;
 d3.select("#dropdown").on("change", updateMapColor);
 
 //set function of map type dropdown
-d3.select("#dropdown2").on("change", updateMapType);
+d3.select("#map-layer-dropdown").on("change", updateMapType);
 
 //set call type legend functionality
 d3.selectAll('.legend-btn').on('click', function() {
@@ -223,11 +223,12 @@ function resetCharts(){
 
     var loading = document.getElementById("loading");
     loading.classList.add("loading");
+    setTimeout(function() {
     //reset dropdown
     const dropdown = document.getElementById("dropdown");
     dropdown.value = "option1";
 
-    const dropdown2 = document.getElementById("dropdown2");
+    const dropdown2 = document.getElementById("map-layer-dropdown");
     dropdown2.value = "option1";
 
     //set legend
@@ -253,6 +254,7 @@ function resetCharts(){
 
     loading.classList.remove("loading");
     return returnData
+    }, 100);
   }
 
   //function to reset charts to originl data

@@ -15,7 +15,7 @@
     <!-- Container for reset button -->
     <div class="top-container">
       <div style= "display: flex; flex-wrap: nowrap; justify-content: left; margin-left: 50px;">
-        <button id = "button1" class="button" onclick="resetCharts()"/> Reset Charts </button>
+        <button id = "button1" class="cool-button" onclick="resetCharts()"/> Reset Charts </button>
         <p id = "name" style="font-family: Roboto;margin-left: 5%;margin-top: 5%;align-self: center;color: #e52000;"> Use this button to reset data filters.</p> 
       </div>  
     </div>
@@ -33,6 +33,10 @@
     <div class="first-row-container">
         <div id="my-map-container">
             <div id="my-map"></div>
+            <select id="map-layer-dropdown">
+                <option value="option1">Aerial</option>
+                <option value="option2">Satelite</option>
+              </select>
             <div id="legends-container">
                 <p style="font-family: Roboto;margin-left: 0px; margin-right: 10px;  margin-top: 10px;align-self: center;color: #e52000; font-weight: 600; display: inline-block; vertical-align: top;"> Color by:
                     <select id="dropdown">
@@ -93,12 +97,6 @@
                         <li id = "other" class="legend-btn" category="other2"><span class="legend-symbol"></span> Other</li>       
                     </ul>
                 </div>
-                <p style="font-family: Roboto;margin-left: 10px; margin-top: 10px;align-self: center;color: #e52000; font-weight: 600; display: inline-block; vertical-align: top;"> Background:
-                    <select id="dropdown2">
-                      <option value="option1">Aerial</option>
-                      <option value="option2">Satelite</option>
-                    </select>
-                </p> 
             </div>
 
      
