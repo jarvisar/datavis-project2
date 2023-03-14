@@ -29,7 +29,7 @@ class Zipcode {
        .attr('transform', `translate(${vis.width/1.80}, ${vis.config.margin.top -20 })`)
        .style("text-anchor", "middle")
        .text("Calls by Zipcode")
-       .style("font-family", "system-ui")
+       .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "20px");
 
@@ -38,7 +38,7 @@ class Zipcode {
        .attr("transform", `translate(${vis.width/2},${vis.height + vis.config.margin.bottom + 35})`)
        .style("text-anchor", "start")
        .text("Day of the Week")
-       .style("font-family", "system-ui")
+       .style("font-family", "Roboto")
        .style("color", "black")
        .style("font-size", "14px")
        .append("tspan")
@@ -66,7 +66,7 @@ class Zipcode {
        .attr("y", 15)
        .style("text-anchor", "middle")
        .text("Number of Calls")
-       .style("font-family", "system-ui")
+       .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "14px");
 
@@ -115,7 +115,7 @@ class Zipcode {
         .selectAll("text")
         .style("text-anchor", "end")
         .style("word-wrap", "break-word")
-        .style("font-family", "system-ui")
+        .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "12px")
         .attr("dx", "-0.5em")

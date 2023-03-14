@@ -31,7 +31,7 @@ class Histogram {
        .attr('transform', `translate(${(vis.width)/2.4}, ${vis.config.margin.top -20 })`)
        .attr("font-size", "20px")
        .text("Response Time of Calls")
-       .style("font-family", "system-ui")
+       .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "20px");
     // X axis Label    
@@ -39,7 +39,7 @@ class Histogram {
        .attr("transform", `translate(${(vis.width- vis.config.margin.right - vis.config.margin.left)/2 + vis.config.margin.left},${vis.height + vis.config.contextHeight + vis.config.margin.bottom + 35})`)
        .style("text-anchor", "middle")
        .text("Time to Respond (days)")
-       .style("font-family", "system-ui")
+       .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "14px");
     vis.svg.append("text")
@@ -48,7 +48,7 @@ class Histogram {
        .attr("y", 15)
        .style("text-anchor", "middle")
        .text("Number of Calls")
-       .style("font-family", "system-ui")
+       .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "14px");
 vis.static = true;
@@ -198,6 +198,7 @@ vis.tooltipTrackingArea = vis.svg.append('rect')
         })
         .on('mouseleave', () => {
           vis.tooltip.style('display', 'none');
+          d3.select('#tooltip').style('display', 'none');
         })
         .on('mousemove', function(event) {
           // Get date that corresponds to current mouse x-coordinate
@@ -210,16 +211,18 @@ vis.tooltipTrackingArea = vis.svg.append('rect')
           if(thisData2.length>0){
           var median = (thisData2[0].x0 + thisData2[0].x1)/2
           if(median < vis.x.domain()[1] && median > vis.x.domain()[0]){
-            var text = thisData2[0].x0 +" to " + thisData2[0].x1 + " days: " + thisData2[0].length + " calls"
+            var text = thisData2[0].x0 +" to " + thisData2[0].x1 + " days"
             if(thisData2[0].x0 == 30){
-              text ="30+ days: " + thisData2[0].length + " calls"
+              text ="30+ days"
             }
-            vis.tooltip.select('text')
-              .attr('transform', `translate(${vis.x(median)}, ${vis.y(thisData2[0].length)+30})`)
-              .text(text)
-              .style("font-family", "system-ui")
-              .style("color", "black")
-              .style("font-size", "16px");
+            d3.select('#histo-tooltip')
+                .style('display', 'block')
+                .style('left', (vis.x(median)) + 'px')   
+                .style('top', (vis.y(thisData2[0].length)) + 'px')
+                .html(`
+                  <div style="text-align: center"><b>${text}</b></div>
+                  <div style="text-align: center">${thisData2[0].length + " calls"}</div>
+                `);
             vis.tooltip.select('circle')
               .attr('transform', `translate(${vis.x(median)}, ${vis.y(thisData2[0].length) + vis.config.margin.top})`)
             }

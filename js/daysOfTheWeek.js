@@ -29,7 +29,7 @@ class DaysOfTheWeek {
        .attr('transform', `translate(${vis.width/1.57}, ${vis.config.margin.top -20 })`)
        .style("text-anchor", "middle")
        .text("Calls by Day of the Week")
-       .style("font-family", "system-ui")
+       .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "20px");
 
@@ -38,7 +38,7 @@ class DaysOfTheWeek {
        .attr("transform", `translate(${vis.width/2 + vis.config.margin.left},${vis.height + vis.config.margin.bottom + 35})`)
        .style("text-anchor", "middle")
        .text("Day of the Week")
-       .style("font-family", "system-ui")
+       .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "14px");
 
@@ -50,7 +50,7 @@ class DaysOfTheWeek {
        .attr("y", 15)
        .style("text-anchor", "middle")
        .text("Number of Calls")
-       .style("font-family", "system-ui")
+       .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "14px");
 
@@ -99,7 +99,7 @@ class DaysOfTheWeek {
         .selectAll("text")
         .style("text-anchor", "middle")
         .style("word-wrap", "break-word")
-        .style("font-family", "system-ui")
+        .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "12px")
         .attr("dx", "-0.3em")

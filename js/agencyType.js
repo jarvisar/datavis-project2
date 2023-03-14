@@ -26,7 +26,7 @@ class AgencyType {
        .attr('transform', `translate(${vis.width/2.67}, ${vis.config.margin.top -20 })`)
        .attr("font-size", "20px")
        .text("Calls by Responding Agency")
-       .style("font-family", "system-ui")
+       .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "20px");
 
@@ -35,7 +35,7 @@ class AgencyType {
        .attr("transform", `translate(${vis.width/2 + vis.config.margin.left},${vis.height + vis.config.margin.bottom + 35})`)
        .style("text-anchor", "middle")
        .text("Number of Calls")
-       .style("font-family", "system-ui")
+       .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "14px")
 
@@ -46,7 +46,7 @@ class AgencyType {
        .attr("y", 35)
        .style("text-anchor", "middle")
        .text("Responding Agency")
-       .style("font-family", "system-ui")
+       .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "14px");
 
@@ -144,7 +144,7 @@ class AgencyType {
         .selectAll("text")
         .style("text-anchor", "start")
         .style("word-wrap", "break-word")
-        .style("font-family", "system-ui")
+        .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "11px")
         .attr("dx", "1.2em")

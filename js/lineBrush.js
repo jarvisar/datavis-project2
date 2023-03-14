@@ -36,7 +36,7 @@ class Line {
        .attr('transform', `translate(${(vis.width - vis.config.margin.left - vis.config.margin.right)/2}, ${vis.config.margin.top -20 })`)
        .attr("font-size", "20px")
        .text("Calls Placed Over 2022")
-       .style("font-family", "system-ui")
+       .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "20px");
     // X axis Label    
@@ -44,7 +44,7 @@ class Line {
        .attr("transform", `translate(${(vis.width)/1.8},${vis.height + vis.config.margin.bottom + 25})`)
        .style("text-anchor", "middle")
        .text("Date Of Call")
-       .style("font-family", "system-ui")
+       .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "16px");
     vis.svg.append("text")
@@ -53,7 +53,7 @@ class Line {
        .attr("y", 15)
        .style("text-anchor", "middle")
        .text("Number of Calls Placed")
-       .style("font-family", "system-ui")
+       .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "16px");
     vis.xAxisLine = vis.svg.append("line")
@@ -310,7 +310,7 @@ class Line {
                 vis.tooltip.select('text')
               .attr('transform', `translate(${vis.xScaleFocus(parseFloat(d.day))},${(vis.yScaleFocus(d.num) - 5)})`)
               .text(dateLabel)
-              .style("font-family", "system-ui")
+              .style("font-family", "Roboto")
               .style("color", "black")
               .style("font-size", "16px")
               .style("font-weight", "600");
@@ -322,7 +322,7 @@ class Line {
               vis.tooltip.select('text')
                   .attr('transform', `translate(${vis.xScaleFocus(parseFloat(d.day)) - 15},${(vis.yScaleFocus(d.num) - 5)})`)
                   .text(Math.round(d.num))
-                  .style("font-family", "system-ui")
+                  .style("font-family", "Roboto")
                   .style("color", "black")
                   .style("font-size", "16px");
                   vis.tooltip.select('circle')
