@@ -217,8 +217,8 @@ vis.tooltipTrackingArea = vis.svg.append('rect')
             }
             d3.select('#histo-tooltip')
                 .style('display', 'block')
-                .style('left', (vis.x(median)) + 'px')   
-                .style('top', (vis.y(thisData2[0].length)) + 'px')
+                .style('left', (vis.x(median) + 5) + 'px')   
+                .style('top', (vis.y(thisData2[0].length) - 10) + 'px')
                 .html(`
                   <div style="text-align: center"><b>${text}</b></div>
                   <div style="text-align: center">${thisData2[0].length + " calls"}</div>
