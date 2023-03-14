@@ -285,6 +285,7 @@ class Line {
         })
         .on('mouseleave', () => {
           vis.tooltip.style('display', 'none');
+          d3.select('#line-tooltip').style('display', 'none');
         })
         .on('mousemove', function(event) {
           // Get date that corresponds to current mouse x-coordinate
@@ -304,28 +305,29 @@ class Line {
               const start = new Date( 'January 1, 2021'); // Convert start date to a Date object
               const date = new Date(start.getTime() + d.day * oneDay); // Add the number of days to the start date
               const options = { month: 'long', day: 'numeric', year: 'numeric' }; // Date formatting options
-              var dateLabel =  date.toLocaleDateString('en-US', options) + ": " + Math.round(d.num) + " calls"; // Format the date string
 
-
-                vis.tooltip.select('text')
-              .attr('transform', `translate(${vis.xScaleFocus(parseFloat(d.day))},${(vis.yScaleFocus(d.num) - 5)})`)
-              .text(dateLabel)
-              .style("font-family", "Roboto")
-              .style("color", "black")
-              .style("font-size", "16px")
-              .style("font-weight", "600");
+              d3.select('#line-tooltip')
+              .style('display', 'block')
+              .style('left', (vis.xScaleFocus(parseFloat(d.day)) + 5) + 'px')   
+              .style('top', ((vis.yScaleFocus(d.num) - 5)) + 'px')
+              .html(`
+                <div style="text-align: center"><b>${date.toLocaleDateString('en-US', options)}</b></div>
+                <div style="text-align: center">${Math.round(d.num) + " calls"}</div>
+              `);
               vis.tooltip.select('circle')
               .attr('transform', `translate(${vis.xScaleFocus(parseFloat(d.day))},${vis.yScaleFocus(d.num)})`);
           
           }
           else{
-              vis.tooltip.select('text')
-                  .attr('transform', `translate(${vis.xScaleFocus(parseFloat(d.day)) - 15},${(vis.yScaleFocus(d.num) - 5)})`)
-                  .text(Math.round(d.num))
-                  .style("font-family", "Roboto")
-                  .style("color", "black")
-                  .style("font-size", "16px");
-                  vis.tooltip.select('circle')
+            d3.select('#line-tooltip')
+                .style('display', 'block') 
+                .style('left', (vis.xScaleFocus(parseFloat(d.day)) + 5) + 'px')   
+                .style('top', ((vis.yScaleFocus(d.num) - 5)) + 'px')
+                .html(`
+                <div style="text-align: center"><b>${date.toLocaleDateString('en-US', options)}</b></div>
+                <div style="text-align: center">${Math.round(d.num) + " calls"}</div>
+                `);
+            vis.tooltip.select('circle')
               .attr('transform', `translate(${vis.xScaleFocus(parseFloat(d.day))},${vis.yScaleFocus(d.num)})`);
           
             }
