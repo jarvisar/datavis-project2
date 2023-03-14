@@ -18,7 +18,8 @@
   border: 1px solid #ddd;
   font-size: 12px;
   font-weight: 600;
-  padding: 2px 8px;
+  padding: 3px 9px;
+  font-family: Roboto;
 }
 .tooltip-label {
   font-weight: 500;
@@ -34,10 +35,9 @@
   box-shadow: 2px 2px 3px 0px rgb(92 92 92 / 0.5);
   border: 1px solid #ddd;
   font-size: 12px;
-  padding: 2px 8px;
+  padding: 3px 9px;
   pointer-events: none;
   font-family: Roboto;
-  padding: 5px;
 }
 
 #line-tooltip {
@@ -47,10 +47,9 @@
   box-shadow: 2px 2px 3px 0px rgb(92 92 92 / 0.5);
   border: 1px solid #ddd;
   font-size: 12px;
-  padding: 2px 8px;
+  padding: 3px 9px;
   pointer-events: none;
   font-family: Roboto;
-  padding: 5px;
 }
 
 /* Set horizontal divider style */
