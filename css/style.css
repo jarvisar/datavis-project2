@@ -28,7 +28,7 @@
 
 /* Set horizontal divider style */
 hr.rounded {
-  border-top: 5px solid #e52000;
+  border-top: 5px solid #AA4A44;
   border-radius: 3px;
 }
 
@@ -67,7 +67,7 @@ hr.rounded {
   font-size: 28px;
   margin-top: 20px;
   border-radius: 15px;
-  font-family: "system-ui";
+  font-family: Roboto;
 }
 .button:hover {
   filter: brightness(60%);
@@ -75,9 +75,9 @@ hr.rounded {
 
 /* Vertical divider style */
 .line-divider {
-  height: 46vh;
+  height: 52vh;
   width: 8px;
-  background-color: #e52000;
+  background-color: #AA4A44;
   border-radius: 3px;
   display: inline-block;
 }
@@ -100,7 +100,7 @@ hr.rounded {
   border-radius: 5px;
   width: 165px;
   margin-bottom: 20px;
-  font-family: system-ui;
+  font-family: Roboto;
 }
 
 /* Legend */
@@ -112,6 +112,8 @@ hr.rounded {
 .legend-btn {
   display: inline-block;
   margin: 0 15px 0 0;
+  font-family: Roboto;
+  font-size: 12px;
   cursor: pointer;
   transition: all ease-in-out 200ms;
 }
@@ -230,7 +232,7 @@ hr.rounded {
   border-radius: 5px;
   width: 75px;
   margin-bottom: 20px;
-  font-family: system-ui;
+  font-family: Roboto;
 }
 
 /* Bar chart container */
@@ -238,4 +240,26 @@ hr.rounded {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 0px;
+}
+
+#loading {
+	font-family: Roboto;
+	opacity: 0;
+	font-size: 16pt;
+	text-align: center;
+	color: white;
+	transition: opacity 0.1s ease-in-out;
+	background-color: #AA4A44; 
+	box-shadow: 0px 1px 3px #777;
+	position: fixed; 
+	width: 120px;
+	bottom: 100px; 
+	left: calc(50% - 60px); 
+	padding: 10px; 
+	border-radius: 10px;
+}
+  
+#loading.loading {
+	display: block;
+	opacity: 1;
 }

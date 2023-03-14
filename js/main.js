@@ -6,33 +6,40 @@ let background_Url = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/
 let background_Attr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 let daysOfTheWeek, lineChart, agencyChart, zipChart;
 
+
 //Data is split into 2 files to reduce file size for GitHub upload. 
 //Read first half:
 d3.csv('data/311_data_pt_1.csv')
-.then(thisdata => {
-    thisdata.forEach(d => {
-      //Add a latitude and longitude for every data point with the correct configuration
-      if(!isNaN(d.LATITUDE) && !isNaN(d.LONGITUDE) && d.LONGITUDE!= "" && d.LATITUDE!= "" && isNaN(Date.parse(d.LONGITUDE)) && isNaN(Date.parse(d.LATITUDE))){
+  .then(thisdata => {
+    var loading = document.getElementById("loading"); 
+    loading.classList.add("loading"); // Add loading message
+    setTimeout(function(){
+      thisdata.forEach(d => {
+        //Add a latitude and longitude for every data point with the correct configuration
+        if(!isNaN(d.LATITUDE) && !isNaN(d.LONGITUDE) && d.LONGITUDE!= "" && d.LATITUDE!= "" && isNaN(Date.parse(d.LONGITUDE)) && isNaN(Date.parse(d.LATITUDE))){
           d.latitude = +d.LATITUDE; //make sure these are not strings
           d.longitude = +d.LONGITUDE; //make sure these are not strings
           d.mapColor = "#4682b4"
-      }
-      d.dateDif = dateDiffInDays(d.REQUESTED_DATETIME,d.UPDATED_DATETIME)
-      if(d.dateDif > 30){
-        d.dateDifHist = 30
-      }
-      else{
-        d.dateDifHist = d.dateDif
-      }
-      d.dayOfYear = dayOfTheYear(d.REQUESTED_DATETIME)
-      globalData.push(d)
-    });
-
+        }
+        d.dateDif = dateDiffInDays(d.REQUESTED_DATETIME,d.UPDATED_DATETIME)
+        if (d.dateDif > 30){
+          d.dateDifHist = 30
+        } else{
+          d.dateDifHist = d.dateDif
+        }
+        d.dayOfYear = dayOfTheYear(d.REQUESTED_DATETIME)
+        globalData.push(d)
+      });
+      
+    }, 100) // Use setTimeout to delay the loading message (prevent null classlist error)
   })
-  .catch(error => console.error(error));
-//Read first half:
-  d3.csv('data/311_data_pt_2.csv')
+.catch(error => console.error(error));
+
+//Read second half:
+d3.csv('data/311_data_pt_2.csv')
 .then(thisdata => {
+
+  setTimeout(function(){
     thisdata.forEach(d => {
       //Add a latitude and longitude for every data point with the correct configuration
       if(!isNaN(d.LATITUDE) && !isNaN(d.LONGITUDE) && d.LONGITUDE!= "" && d.LATITUDE!= "" && isNaN(Date.parse(d.LONGITUDE)) && isNaN(Date.parse(d.LATITUDE))){
@@ -97,9 +104,10 @@ d3.csv('data/311_data_pt_1.csv')
       }, getZip(data),(filterData) => {
         //TO-DO
     }); 
-
-  })
-  .catch(error => console.error(error));
+    loading.classList.remove("loading"); // Remove loading message
+  }, 100) // Use setTimeout to delay the loading message (prevent null classlist error)
+})
+.catch(error => console.error(error));
 
 //Log Data
 console.log("Here is the data: ", globalData);
@@ -213,6 +221,8 @@ function getMapData(thisData){
 function resetCharts(){
     let returnData = []
 
+    var loading = document.getElementById("loading");
+    loading.classList.add("loading");
     //reset dropdown
     const dropdown = document.getElementById("dropdown");
     dropdown.value = "option1";
@@ -226,6 +236,9 @@ function resetCharts(){
     document.getElementById("option3-legend").style.display = "none";
     document.getElementById("option4-legend").style.display = "none";
 
+    // remove inactive from all legend buttons
+    d3.selectAll('.legend-btn').classed('inactive', false); 
+
     //reset backfround
     background_1_Url = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
     background_1_Attr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
@@ -238,6 +251,7 @@ function resetCharts(){
 
     //TO-DO
 
+    loading.classList.remove("loading");
     return returnData
   }
 
