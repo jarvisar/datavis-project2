@@ -107,7 +107,7 @@ class LeafletMap {
                                 .style('opacity', 1)
                                 .style('z-index', 1000000)
                                   // Format number with million and thousand separator
-                                .html(`<div class="tooltip-title">Service Request ID: ${reqID}</div>
+                                .html(`<div class="tooltip-title"><b>Service Request ID: ${reqID}</b></div>
                                           <ul>
                                             <li>Date of Call: ${reqDate}</li>
                                             <li>Updated Date: ${upDate}</li>

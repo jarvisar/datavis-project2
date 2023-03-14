@@ -77,8 +77,6 @@ d3.csv('data/311_data_pt_2.csv')
       'containerWidth': window.innerWidth/3.8,
       }, getDayOfWeekData(data),(filterData) => {
         //TO-DO
-        // filter data to only include the selected day of the week
-        // Filter the data to only include items with the desired weekday
         const filteredData = data.filter(item => {
           const dayOfWeek = getDay(item.REQUESTED_DATETIME);
           const weekdayName = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][dayOfWeek];
@@ -93,7 +91,10 @@ d3.csv('data/311_data_pt_2.csv')
       'containerHeight': window.innerHeight/2.7,
       'containerWidth': window.innerWidth/3.8,
       }, getAgency(data),(filterData) => {
-        //TO-DO
+        const filteredData = data.filter(item => {
+          return item.AGENCY_RESPONSIBLE.includes(filterData);
+        });
+        updateCharts(filteredData);
     }); 
 
     //Create histogram
@@ -109,9 +110,12 @@ d3.csv('data/311_data_pt_2.csv')
       'containerHeight': window.innerHeight/2.7,
       'containerWidth': window.innerWidth/2.13,
       }, getZip(data),(filterData) => {
-        //TO-DO
+        const filteredData = data.filter(item => item.ZIPCODE === filterData);
+        updateCharts(filteredData);
     }); 
+
     loading.classList.remove("loading"); // Remove loading message
+
   }, 125) // Use setTimeout to delay the loading message (prevent null classlist error)
 })
 .catch(error => console.error(error));

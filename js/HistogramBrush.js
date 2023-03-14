@@ -131,26 +131,25 @@ vis.svg.append('defs').append('clipPath')
 vis.brush = d3.brushX()
   .extent([[vis.config.margin.left, vis.height + vis.config.margin.bottom ], [vis.width, vis.config.contextHeight + vis.height + vis.config.margin.bottom ]])
   .on('brush', function({selection}) {
-              if (selection) vis.brushed(selection);
-            })
-            .on('end', function({selection}) {
-              let s1 = selection[0]
-              let s2 = selection[1]
-              if(isNaN(selection[0])){s1 = vis.config.margin.left}
-              if(isNaN(selection[1])){s2 = max} 
-              if (!selection) 
-                {
-                vis.brushed(null)
-              }else if(s1 != vis.config.margin.left || s2 != vis.width){
-                 //updateFromHist(vis.selectedDomain[0],vis.selectedDomain[1])
-                 vis.static == false
-              }
-              else if(s1 == vis.config.margin.left && s2 == vis.width && vis.static == false){
-                 //updateFromHist(vis.selectedDomain[0],vis.selectedDomain[1])
-                 vis.static == true
-              }
-
-            });
+      if (selection) vis.brushed(selection);
+    })
+    .on('end', function({selection}) {
+      let s1 = selection[0]
+      let s2 = selection[1]
+      if(isNaN(selection[0])){s1 = vis.config.margin.left}
+      if(isNaN(selection[1])){s2 = max} 
+      if (!selection) 
+        {
+        vis.brushed(null)
+      }else if(s1 != vis.config.margin.left || s2 != vis.width){
+          //updateFromHist(vis.selectedDomain[0],vis.selectedDomain[1])
+          vis.static == false
+      }
+      else if(s1 == vis.config.margin.left && s2 == vis.width && vis.static == false){
+          //updateFromHist(vis.selectedDomain[0],vis.selectedDomain[1])
+          vis.static == true
+      }
+    });
 
 vis.contextRects.selectAll('rect')
   .data(vis.bins)
