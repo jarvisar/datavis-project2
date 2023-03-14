@@ -143,6 +143,9 @@ class LeafletMap {
       vis.updateVis();
     });
 
+    var fullscreen = new L.Control.Fullscreen();
+    vis.theMap.addControl(fullscreen);
+
   }
 
   updateVis() {
