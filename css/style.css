@@ -4,7 +4,7 @@
   height: 455px;
 }
 #my-map-container {
-  width: 50%;
+  width: 55%;
   height: 500px;
   margin-bottom: 5px;
 }
@@ -66,7 +66,7 @@ hr.rounded {
   display: inline-block;
   font-size: 28px;
   margin-top: 20px;
-  border-radius: 25%;
+  border-radius: 15px;
   font-family: "system-ui";
 }
 .button:hover {
@@ -111,7 +111,7 @@ hr.rounded {
 }
 .legend-btn {
   display: inline-block;
-  margin: 0 20px 0 0;
+  margin: 0 15px 0 0;
   cursor: pointer;
   transition: all ease-in-out 200ms;
 }
@@ -168,19 +168,67 @@ hr.rounded {
       display: flex;
       justify-content: space-between;
     }
-    .option2-legend-text {
-      font-size: 18px;
-      font-weight: bold;
-      margin: auto 10px;
-      color: #555;
+
+
+    /* Legend 3 */
+.option3-legend {
+      height: 50px;
+      width: 300px;
+      margin: 10px;
+      background: linear-gradient(to right, #7040AB , #B33CB1 , #EE4395 , #FF5E64 , #FF8B39 , #DAC030 , #B1EE57 ,  #65F75E , #2BEC89 , #19CBBE ,  #2C9CDE , #4F6BDA , #6E40AA );
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
     }
-    .option2-legend-min {
-      font-size: 14px;
-      margin: auto 0;
-      color: #777;
-    }
-    .option2-legend-max {
-      font-size: 14px;
-      margin: auto 0;
-      color: #777;
-    }
+
+/* Legend 4 */
+.legend4 {
+  margin: 20px 0;
+  list-style: none;
+  padding: 0;
+}
+.legend-btn[category="water"] .legend-symbol {
+  background: #4e79a7;
+}
+.legend-btn[category="build"] .legend-symbol {
+  background: #f28e2c;
+}
+.legend-btn[category="health"] .legend-symbol {
+  background: #e15759;
+}
+.legend-btn[category="manager"] .legend-symbol {
+  background: #76b7b2;
+}
+.legend-btn[category="trans"] .legend-symbol {
+  background: #59a14f;
+}
+.legend-btn[category="fire"] .legend-symbol {
+  background: #edc949;
+}
+.legend-btn[category="park"] .legend-symbol {
+  background: #af7aa1;
+}
+.legend-btn[category="public"] .legend-symbol {
+  background: #ff9da7;
+}
+.legend-btn[category="law"] .legend-symbol {
+  background: #9c755f;
+}
+.legend-btn[category="other2"] .legend-symbol {
+  background: #bab0ab;
+}
+
+/* Dropdown 2 style */
+#dropdown2 {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #d2d2d259;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  width: 75px;
+  margin-bottom: 20px;
+  font-family: system-ui;
+}
