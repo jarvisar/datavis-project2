@@ -53,6 +53,7 @@ class Zipcode {
        .style("font-size", "14px")
        .style("fill", "blue")
        .text("Cincinnati ZIP Codes Map")
+        .style("text-decoration", "underline")
         .style("cursor", "pointer")
        .on("click", function() {
             // add the link you want to redirect to when the text is clicked
