@@ -221,18 +221,23 @@ function getMapData(thisData){
 }
 
 function updateCharts(filteredData){
-  lineChart.data = getLineData(filteredData);
-  zipChart.data = getZip(filteredData);
-  histogram.data = filteredData;
-  agencyChart.data = getAgency(filteredData);
-  daysOfTheWeek.data = getDayOfWeekData(filteredData);
-  map.data = getMapData(filteredData);
-  lineChart.updateVis();
-  zipChart.updateVis();
-  histogram.updateVis();
-  agencyChart.updateVis();
-  daysOfTheWeek.updateVis();
-  map.updateVis();
+  var loading = document.getElementById("loading");
+  loading.classList.add("loading");
+  setTimeout(function() {
+    lineChart.data = getLineData(filteredData);
+    zipChart.data = getZip(filteredData);
+    histogram.data = filteredData;
+    agencyChart.data = getAgency(filteredData);
+    daysOfTheWeek.data = getDayOfWeekData(filteredData);
+    map.data = getMapData(filteredData);
+    lineChart.updateVis();
+    zipChart.updateVis();
+    histogram.updateVis();
+    agencyChart.updateVis();
+    daysOfTheWeek.updateVis();
+    map.updateVis();
+    loading.classList.remove("loading");
+  }, 100);
 }
 
 //function to reset charts to originl data
@@ -269,7 +274,18 @@ function resetCharts(){
     updateMapColor();
 
     //TO-DO
-    updateCharts(data);
+    lineChart.data = getLineData(data);
+    zipChart.data = getZip(data);
+    histogram.data = data;
+    agencyChart.data = getAgency(data);
+    daysOfTheWeek.data = getDayOfWeekData(data);
+    map.data = getMapData(data);
+    lineChart.updateVis();
+    zipChart.updateVis();
+    histogram.updateVis();
+    agencyChart.updateVis();
+    daysOfTheWeek.updateVis();
+    map.updateVis();
     loading.classList.remove("loading");
     return returnData
     }, 100);
