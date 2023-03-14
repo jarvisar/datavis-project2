@@ -95,7 +95,7 @@ class DaysOfTheWeek {
     vis.xAxisInsert = vis.svg.append('g')
         .attr('class', 'x-axis')
         .attr('transform', `translate(${vis.config.margin.left},${vis.height + vis.config.margin.top})`)
-        .call(d3.axisBottom(vis.xScale))
+        .call(d3.axisBottom(vis.xScale).tickFormat(d => d.substring(0, 3)))
         .selectAll("text")
         .style("text-anchor", "middle")
         .style("word-wrap", "break-word")
