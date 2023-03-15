@@ -168,7 +168,7 @@ vis.contextRects.selectAll('rect')
     if(numMax > 0){
         half = numMax/2
     }
-let defaultBrushSelection = [vis.xContext(0), half];
+let defaultBrushSelection = [vis.xContext(1), half];
 if(vis.data.length>0){
 vis.svg.append('g')
   .attr('class', 'plan')
