@@ -124,7 +124,7 @@ hr.rounded {
 .line-divider {
   height: 52vh;
   width: 8px;
-  background-color: #555;
+  background-color: #666;
   border-radius: 3px;
   display: inline-block;
 }
