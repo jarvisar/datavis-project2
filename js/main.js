@@ -30,7 +30,7 @@ d3.csv('data/311_data_pt_1.csv')
         globalData.push(d)
       });
       
-    }) // Use setTimeout to delay the loading message (prevent null classlist error)
+    }, 20) // Use setTimeout to delay the loading message (prevent null classlist error)
   })
 .catch(error => console.error(error));
 
@@ -117,7 +117,7 @@ d3.csv('data/311_data_pt_2.csv')
 
     loading.classList.remove("loading"); // Remove loading message
 
-  }) // Use setTimeout to delay the loading message (prevent null classlist error)
+  }, 100) // Use setTimeout to delay the loading message (prevent null classlist error)
 })
 .catch(error => console.error(error));
 
@@ -494,14 +494,29 @@ function updateMapColor(){
     background_2_Url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
     background_2_Attr = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
 
-    if(background_Url == background_1_Url){
-      background_Url = background_2_Url
-      background_Attr =  background_2_Attr
+    //TOPO
+    background_3_Url ='https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
+    background_3_Attr = 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+
+    // get value of map-layer-dropdown id 
+    var dropdownValue = document.getElementById("map-layer-dropdown").value;
+    console.log(dropdownValue)
+    if(dropdownValue == "Streets"){
+      //areial background
+      background_Url = background_1_Url;
+      background_Attr = background_1_Attr;
     }
-    else{
-      background_Url = background_1_Url
-      background_Attr =  background_1_Attr
+    else if(dropdownValue == "Satellite"){
+      //satelite background
+      background_Url = background_2_Url;
+      background_Attr = background_2_Attr;
     }
+    else if(dropdownValue == "OpenStreetMap"){
+      //TOPO
+      background_Url = background_3_Url;
+      background_Attr = background_3_Attr;
+    }
+
     map.background_Url = background_Url
     map.background_Attr = background_Attr
     map.updateVis();
