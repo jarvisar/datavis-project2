@@ -501,7 +501,7 @@ function updateMapColor(){
     // get value of map-layer-dropdown id 
     var dropdownValue = document.getElementById("map-layer-dropdown").value;
     console.log(dropdownValue)
-    if(dropdownValue == "Streets"){
+    if(dropdownValue == "Terrain"){
       //areial background
       background_Url = background_1_Url;
       background_Attr = background_1_Attr;
@@ -511,7 +511,7 @@ function updateMapColor(){
       background_Url = background_2_Url;
       background_Attr = background_2_Attr;
     }
-    else if(dropdownValue == "OpenStreetMap"){
+    else if(dropdownValue == "Streets"){
       //TOPO
       background_Url = background_3_Url;
       background_Attr = background_3_Attr;
