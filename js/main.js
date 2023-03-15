@@ -498,28 +498,16 @@ function updateMapColor(){
     background_3_Url ='https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
     background_3_Attr = 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
 
-    // get value of map-layer-dropdown id 
-    var dropdownValue = document.getElementById("map-layer-dropdown").value;
-    console.log(dropdownValue)
-    if(dropdownValue == "Terrain"){
-      //areial background
-      background_Url = background_1_Url;
-      background_Attr = background_1_Attr;
-    }
-    else if(dropdownValue == "Satellite"){
-      //satelite background
-      background_Url = background_2_Url;
-      background_Attr = background_2_Attr;
-    }
-    else if(dropdownValue == "Streets"){
-      //TOPO
-      background_Url = background_3_Url;
-      background_Attr = background_3_Attr;
-    }
-
-    map.background_Url = background_Url
-    map.background_Attr = background_Attr
+    const dropdownValue = document.getElementById("map-layer-dropdown").value;
+    const backgrounds = {
+      Terrain: { Url: background_1_Url, Attr: background_1_Attr },
+      Satellite: { Url: background_2_Url, Attr: background_2_Attr },
+      Streets: { Url: background_3_Url, Attr: background_3_Attr }
+    };
+    map.background_Url = backgrounds[dropdownValue].Url;
+    map.background_Attr = backgrounds[dropdownValue].Attr;
     map.updateVis();
+    
   }
 
   function dateDiffInDays(date1, date2) {
