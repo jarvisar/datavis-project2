@@ -30,7 +30,7 @@ d3.csv('data/311_data_pt_1.csv')
         globalData.push(d)
       });
       
-    }, 0) // Use setTimeout to delay the loading message (prevent null classlist error)
+    }) // Use setTimeout to delay the loading message (prevent null classlist error)
   })
 .catch(error => console.error(error));
 
@@ -117,7 +117,7 @@ d3.csv('data/311_data_pt_2.csv')
 
     loading.classList.remove("loading"); // Remove loading message
 
-  }, 125) // Use setTimeout to delay the loading message (prevent null classlist error)
+  }) // Use setTimeout to delay the loading message (prevent null classlist error)
 })
 .catch(error => console.error(error));
 
