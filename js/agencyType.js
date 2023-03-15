@@ -162,7 +162,7 @@ class AgencyType {
             .attr('data-value',d)
             .html(`
               <div class="tooltip-title" style="font-weight: 600;">Agency: ${d}</div>
-              <div style="font-weight: 600;">Number of Calls: ${vis.data.filter(data => data.agency === d)[0].count}</div>
+              <div >Calls: ${vis.data.filter(data => data.agency === d)[0].count}</div>
             `);
         })
         .on('mouseleave', () => {
