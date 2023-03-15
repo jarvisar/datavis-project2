@@ -60,7 +60,23 @@ d3.csv('data/311_data_pt_2.csv')
 
 
     //create the map
-    map = new LeafletMap({parentElement: '#my-map'}, getMapData(data), background_Url, background_Attr);
+    map = new LeafletMap({parentElement: '#my-map'}, getMapData(data), background_Url, background_Attr, (filteredData) => {
+      var loading = document.getElementById("loading");
+      loading.classList.add("loading");
+      setTimeout(function() {
+        lineChart.data = getLineData(filteredData);
+        zipChart.data = getZip(filteredData);
+        histogram.data = filteredData;
+        agencyChart.data = getAgency(filteredData);
+        daysOfTheWeek.data = getDayOfWeekData(filteredData);
+        lineChart.updateVis();
+        zipChart.updateVis();
+        histogram.updateVis();
+        agencyChart.updateVis();
+        daysOfTheWeek.updateVis();
+        loading.classList.remove("loading");
+      }, 100);
+    });
     updateMapColor();
 
     //Create Line chart

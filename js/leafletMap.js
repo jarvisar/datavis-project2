@@ -5,11 +5,12 @@ class LeafletMap {
    * @param {Object}
    * @param {Array}
    */
-  constructor(_config, _data,_background_Url, _background_Attr) {
+  constructor(_config, _data,_background_Url, _background_Attr, _refresh) {
     this.config = {
       parentElement: _config.parentElement,
     }
     this.data = _data;
+    this.refresh = _refresh;
     this.background_Url = _background_Url
     this.background_Attr = _background_Attr
     this.initVis();
@@ -131,10 +132,60 @@ class LeafletMap {
       vis.updateVis();
     });
 
+
+  vis.brush = d3.brush()
+    .extent([[0, 0], [vis.theMap.getSize().x, vis.theMap.getSize().y]])
+    .on("start brush", brushed)
+    .on("end", brushEnd);
+
+  // Uncomment this to enable brush. Currently disabled because it prevents tooltips from appearing
+  // Maybe add toggle button to toggle brush?
+  // vis.svg.append("g")
+  //   .attr("class", "brush")
+  //   .call(vis.brush);
+
+  function brushed(event) {
+      // Get the current brush selection and convert it to lat/lon coordinates
+      let selection = event.selection;
+      if (event.selection) {
+        // Disable mouse events on SVG overlay
+        vis.svg.attr("pointer-events", "none");
+      } else {
+        // Enable mouse events on SVG overlay
+        vis.svg.attr("pointer-events", "auto");
+      }
+      let bounds = L.latLngBounds(
+        vis.theMap.layerPointToLatLng([selection[0][0], selection[0][1]]),
+        vis.theMap.layerPointToLatLng([selection[1][0], selection[1][1]])
+      );
+    
+      // Filter your data based on the brush selection
+      let filteredData = vis.data.filter(d => bounds.contains([d.latitude, d.longitude]));
+    
+      // Update the visualization with the filtered data
+      vis.Dots = vis.svg.selectAll('circle')
+        .attr("stroke", d => bounds.contains([d.latitude, d.longitude]) ? "white" : "black");
+    }
+
+    function brushEnd(event){
+      let selection = event.selection;
+      let bounds = L.latLngBounds(
+        vis.theMap.layerPointToLatLng([selection[0][0], selection[0][1]]),
+        vis.theMap.layerPointToLatLng([selection[1][0], selection[1][1]])
+      );
+    
+      // Filter your data based on the brush selection
+      let filteredData = vis.data.filter(d => bounds.contains([d.latitude, d.longitude]));
+        console.log(filteredData);
+      vis.refresh(filteredData);
+    }
+
     var fullscreen = new L.Control.Fullscreen();
     vis.theMap.addControl(fullscreen);
 
   }
+
+
 
   updateVis() {
     let vis = this;
@@ -143,6 +194,7 @@ class LeafletMap {
     
     //want to control the size of the radius to be a certain number of meters? 
     vis.radiusSize = 3; 
+    // clear brush
 
     // if( vis.theMap.getZoom > 15 ){
     //   metresPerPixel = 40075016.686 * Math.abs(Math.cos(map.getCenter().lat * Math.PI/180)) / Math.pow(2, map.getZoom()+8);
