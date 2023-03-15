@@ -93,7 +93,6 @@ class LeafletMap {
           //create a tool tip
           d3.select('#tooltip')
               .style("display","block")
-              .style('opacity', 1)
               .style('z-index', 1000000)
                 // Format number with million and thousand separator
               .html(`<div class="tooltip-title"><b>Service Request ID: ${reqID}</b></div>
@@ -117,7 +116,7 @@ class LeafletMap {
                               .duration('150') //how long we are transitioning between the two states (works like keyframes)
                               .attr('r', 3) //change radius
 
-                            d3.select('#tooltip').style('opacity', 0);//turn off the tooltip
+                            d3.select('#tooltip').style('display', 'none');//turn off the tooltip
 
                           })
                         .on('click', (event, d) => { //experimental feature I was trying- click on point and then fly to it
