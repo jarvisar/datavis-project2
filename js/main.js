@@ -257,7 +257,7 @@ function resetCharts(){
     dropdown.value = "option1";
 
     const dropdown2 = document.getElementById("map-layer-dropdown");
-    dropdown2.value = "option1";
+    dropdown2.value = "Terrain";
 
     //set legend
     document.getElementById("option1-legend").style.display = "inline-block";
