@@ -60,18 +60,22 @@ hr.rounded {
 }
 
 /* Align title and reset button */
-.top-container, .title-container {
+.top-container, .title-container,.info-container  {
     display: inline-block;
     vertical-align: top;
 }
 
 /* set width for title and reset button */
 .top-container {
-     width: 33.33%;
+     width: 40%;
        margin: 0 auto;
 }
 .title-container {
-     width: 33.33%;
+     width: 20%;
+       margin: 0 auto;
+}
+.info-container {
+     width: 20%;
        margin: 0 auto;
 }
 
