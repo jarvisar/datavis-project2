@@ -181,8 +181,25 @@ d3.csv('data/311_data_pt_2.csv')
       'containerHeight': window.innerHeight/4.6,
       'containerWidth': window.innerWidth/2.26,
       }, getLineData(data),(filterDate1,filterDate2) => {
-          console.log(filterDate1)
-          console.log(filterDate2)
+          var filteredData = data;
+          filteredData = filteredData.filter(d => new Date(d.REQUESTED_DATETIME) > filterDate1)
+          filteredData = filteredData.filter(d => new Date(d.REQUESTED_DATETIME) < filterDate2)
+          var loading = document.getElementById("loading");
+        loading.classList.add("loading");
+        setTimeout(function() {
+        map.data = getMapData(data);
+        zipChart.data = getZip(filteredData);
+        //histogram.data = filteredData;
+        agencyChart.data = getAgency(filteredData);
+        daysOfTheWeek.data = getDayOfWeekData(filteredData);
+        map.updateVis();
+        zipChart.updateVis();
+        //histogram.updateVis();
+        agencyChart.updateVis();
+        daysOfTheWeek.updateVis();
+        loading.classList.remove("loading");
+      }, 100);
+        //data = filteredData;
     }); 
 
     //Create days of the week chart:
@@ -191,7 +208,6 @@ d3.csv('data/311_data_pt_2.csv')
       'containerHeight': window.innerHeight/2.7,
       'containerWidth': window.innerWidth/3.8,
       }, getDayOfWeekData(data),(filterData) => {
-          console.log(filterData)
           if(currentFilters[0].length == 7){
             currentFilters[0] = [filterData]
           }
@@ -216,7 +232,6 @@ d3.csv('data/311_data_pt_2.csv')
       'containerHeight': window.innerHeight/2.7,
       'containerWidth': window.innerWidth/3.8,
       }, getAgency(data),(filterData) => {
-        console.log(filterData)
         if(currentFilters[1].length == 10){
           currentFilters[1] = [filterData]
         }
@@ -240,7 +255,26 @@ d3.csv('data/311_data_pt_2.csv')
       'parentElement': '#histogram',
       'containerHeight': window.innerHeight/4.6,
       'containerWidth': window.innerWidth/2.26,
-      }, data); 
+      }, data,(filterDate1,filterDate2) => {
+
+        var filteredData = data;
+        filteredData = filteredData.filter(d => d.dateDifHist >= Math.floor(filterDate1))
+        filteredData = filteredData.filter(d => d.dateDifHist <= Math.ceil(filterDate2))
+        var loading = document.getElementById("loading");
+        loading.classList.add("loading");
+        setTimeout(function() {
+        map.data = getMapData(data);
+        zipChart.data = getZip(filteredData);
+        agencyChart.data = getAgency(filteredData);
+        daysOfTheWeek.data = getDayOfWeekData(filteredData);
+        map.updateVis();
+        zipChart.updateVis();
+        agencyChart.updateVis();
+        daysOfTheWeek.updateVis();
+        loading.classList.remove("loading");
+      }, 100);
+        //data = filteredData;
+    }); 
 
     //Create Zipcode chart
     zipChart = new Zipcode({

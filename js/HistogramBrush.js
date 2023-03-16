@@ -138,15 +138,18 @@ vis.brush = d3.brushX()
       let s2 = selection[1]
       if(isNaN(selection[0])){s1 = vis.config.margin.left}
       if(isNaN(selection[1])){s2 = max} 
+
+      s1 = vis.xContext.invert(s1)
+      s2 = vis.xContext.invert(s2)
       if (!selection) 
         {
         vis.brushed(null)
       }else if(s1 != vis.config.margin.left || s2 != vis.width){
-          //updateFromHist(vis.selectedDomain[0],vis.selectedDomain[1])
+          vis.refresh(s1,s2)
           vis.static == false
       }
       else if(s1 == vis.config.margin.left && s2 == vis.width && vis.static == false){
-          //updateFromHist(vis.selectedDomain[0],vis.selectedDomain[1])
+          vis.refresh(s1,s2)
           vis.static == true
       }
     });
@@ -168,7 +171,7 @@ vis.contextRects.selectAll('rect')
     if(numMax > 0){
         half = numMax/2
     }
-let defaultBrushSelection = [vis.xContext(0), half];
+let defaultBrushSelection = [vis.xContext(0), numMax];
 if(vis.data.length>0){
 vis.svg.append('g')
   .attr('class', 'plan')
