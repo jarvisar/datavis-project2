@@ -5,7 +5,16 @@ let map;
 let background_Url = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
 let background_Attr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 let daysOfTheWeek, lineChart, agencyChart, zipChart;
-
+let baseFilters = [["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+  ["Water Works","Building Department","Health Department","Manager's Office","Department of Transportation","Fire and Police Department","Park Department","Public Services","Law Department","Other"],
+  ["45202","45203","45204","45205","45206","45207","45208","45209","45211","45212","45213","45214","45215","45216","45217","45219",
+    "45220","45223","45224","45225","45226","45227","45229","45230","45232","45233","45237","45238","45239","45248"]]
+let currentFilters = [["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+  ["Water Works","Building Department","Health Department","Manager's Office","Department of Transportation","Fire and Police Department","Park Department","Public Services","Law Department","Other"],
+  ["45202","45203","45204","45205","45206","45207","45208","45209","45211","45212","45213","45214","45215","45216","45217","45219",
+    "45220","45223","45224","45225","45226","45227","45229","45230","45232","45233","45237","45238","45239","45248"]]
+let minDate = new Date(2021,0,1); 
+let maxDate = new Date(2023,0,2); 
 //Data is split into 2 files to reduce file size for GitHub upload. 
 //Read first half:
 d3.csv('data/311_data_pt_1.csv')
@@ -27,6 +36,46 @@ d3.csv('data/311_data_pt_1.csv')
           d.dateDifHist = d.dateDif
         }
         d.dayOfYear = dayOfTheYear(d.REQUESTED_DATETIME)
+        if(d.AGENCY_RESPONSIBLE.includes("Water Works") ){
+            //Cin Water Works
+            d.agencyFilter = "Water Works"
+          }
+          else if(d.AGENCY_RESPONSIBLE.includes("Building Dept")){
+            //Cinc Building Dept
+            d.agencyFilter = "Building Department"
+          }
+          else if(d.AGENCY_RESPONSIBLE.includes("Health Dept") ){
+            //Cinc Health Dept
+            d.agencyFilter = "Health Department"
+          }
+          else if(d.AGENCY_RESPONSIBLE.includes("Manager's") ){
+            //City Manager's Office
+            d.agencyFilter = "Manager's Office"
+          }
+          else if(d.AGENCY_RESPONSIBLE.includes("Trans and Eng")){
+            //Dept of Trans and Eng
+            d.agencyFilter = "Department of Transportation"
+          }
+          else if(d.AGENCY_RESPONSIBLE.includes("Fire") || d.AGENCY_RESPONSIBLE.includes("Police")){
+            //Fire and Police Department
+            d.agencyFilter = "Fire and Police Department"
+          }
+          else if(d.AGENCY_RESPONSIBLE.includes("Park Department")){
+            //Park Department
+            d.agencyFilter = "Park Department"
+          }
+          else if(d.AGENCY_RESPONSIBLE.includes("Public Services")){
+            //Public Services
+            d.agencyFilter = "Public Services"
+          }
+          else if(d.AGENCY_RESPONSIBLE.includes("Law Department") ){
+            //Law Department
+            d.agencyFilter = "Law Department"
+          }
+          else{
+            //Other
+            d.agencyFilter = "Other"
+          }
         globalData.push(d)
       });
       
@@ -55,6 +104,53 @@ d3.csv('data/311_data_pt_2.csv')
         d.dateDifHist = d.dateDif
       }
       d.dayOfYear = dayOfTheYear(d.REQUESTED_DATETIME)
+      if(d.dateDif > 30){
+        d.dateDifHist = 30
+      }
+      else{
+        d.dateDifHist = d.dateDif
+      }
+      d.dayOfYear = dayOfTheYear(d.REQUESTED_DATETIME)
+      if(d.AGENCY_RESPONSIBLE.includes("Water Works") ){
+        //Cin Water Works
+        d.agencyFilter = "Water Works"
+      }
+      else if(d.AGENCY_RESPONSIBLE.includes("Building Dept")){
+        //Cinc Building Dept
+        d.agencyFilter = "Building Department"
+      }
+      else if(d.AGENCY_RESPONSIBLE.includes("Health Dept") ){
+        //Cinc Health Dept
+        d.agencyFilter = "Health Department"
+      }
+      else if(d.AGENCY_RESPONSIBLE.includes("Manager's") ){
+      //City Manager's Office
+        d.agencyFilter = "Manager's Office"
+      }
+      else if(d.AGENCY_RESPONSIBLE.includes("Trans and Eng")){
+        //Dept of Trans and Eng
+        d.agencyFilter = "Department of Transportation"
+      }
+      else if(d.AGENCY_RESPONSIBLE.includes("Fire") || d.AGENCY_RESPONSIBLE.includes("Police")){
+        //Fire and Police Department
+        d.agencyFilter = "Fire and Police Department"
+      }
+      else if(d.AGENCY_RESPONSIBLE.includes("Park Department")){
+        //Park Department
+        d.agencyFilter = "Park Department"
+      }
+      else if(d.AGENCY_RESPONSIBLE.includes("Public Services")){
+        //Public Services
+        d.agencyFilter = "Public Services"
+      }
+      else if(d.AGENCY_RESPONSIBLE.includes("Law Department") ){
+      //Law Department
+        d.agencyFilter = "Law Department"
+      }
+      else{
+        //Other
+        d.agencyFilter = "Other"
+      }
       globalData.push(d)
     });
 
@@ -82,9 +178,12 @@ d3.csv('data/311_data_pt_2.csv')
     //Create Line chart
     lineChart = new Line({
       'parentElement': '#timeline',
-      'containerHeight': window.innerHeight/4,
+      'containerHeight': window.innerHeight/4.6,
       'containerWidth': window.innerWidth/2.26,
-      }, getLineData(data)); 
+      }, getLineData(data),(filterDate1,filterDate2) => {
+          console.log(filterDate1)
+          console.log(filterDate2)
+    }); 
 
     //Create days of the week chart:
     daysOfTheWeek = new DaysOfTheWeek({
@@ -92,13 +191,23 @@ d3.csv('data/311_data_pt_2.csv')
       'containerHeight': window.innerHeight/2.7,
       'containerWidth': window.innerWidth/3.8,
       }, getDayOfWeekData(data),(filterData) => {
-        //TO-DO
-        const filteredData = data.filter(item => {
-          const dayOfWeek = getDay(item.REQUESTED_DATETIME);
-          const weekdayName = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][dayOfWeek];
-          return weekdayName === filterData;
-        });
-        updateCharts(filteredData);
+          console.log(filterData)
+          if(currentFilters[0].length == 7){
+            currentFilters[0] = [filterData]
+          }
+          else if(currentFilters[0].includes(filterData)){
+            filterIndex = currentFilters[0].indexOf(filterData)
+            if (filterIndex > -1) { // only splice array when item is found
+              currentFilters[0].splice(filterIndex, 1); // 2nd parameter means remove one item only
+            }
+            if(currentFilters[0].length == 0){
+              currentFilters[0] = baseFilters[0]
+            }        
+          }
+          else{
+            currentFilters[0].push(filterData)
+          }
+          updateCharts();
     }); 
 
     //Create Agency chart
@@ -107,16 +216,29 @@ d3.csv('data/311_data_pt_2.csv')
       'containerHeight': window.innerHeight/2.7,
       'containerWidth': window.innerWidth/3.8,
       }, getAgency(data),(filterData) => {
-        let filteredData = data.filter(item => {
-          return item.AGENCY_RESPONSIBLE.includes(filterData);
-        });
-        updateCharts(filteredData);
+        console.log(filterData)
+        if(currentFilters[1].length == 10){
+          currentFilters[1] = [filterData]
+        }
+        else if( currentFilters[1].includes(filterData)){
+          filterIndex = currentFilters[1].indexOf(filterData)
+          if (filterIndex > -1) { // only splice array when item is found
+            currentFilters[1].splice(filterIndex, 1); // 2nd parameter means remove one item only
+          }
+          if(currentFilters[1].length == 0){
+            currentFilters[1] = baseFilters[1]
+          }        
+        }
+        else{
+          currentFilters[1].push(filterData)
+        }
+        updateCharts();
     }); 
 
     //Create histogram
     histogram = new Histogram({
       'parentElement': '#histogram',
-      'containerHeight': window.innerHeight/4,
+      'containerHeight': window.innerHeight/4.6,
       'containerWidth': window.innerWidth/2.26,
       }, data); 
 
@@ -126,9 +248,22 @@ d3.csv('data/311_data_pt_2.csv')
       'containerHeight': window.innerHeight/2.7,
       'containerWidth': window.innerWidth/2.13,
       }, getZip(data),(filterData) => {
-        let filteredData = data.filter(item => item.ZIPCODE === filterData);
-        console.log(filteredData)
-        updateCharts(filteredData);
+        if(currentFilters[2].length == 30){
+          currentFilters[2] = [filterData]
+        }
+        else if( currentFilters[2].includes(filterData)){
+          filterIndex = currentFilters[2].indexOf(filterData)
+          if (filterIndex > -1) { // only splice array when item is found
+            currentFilters[2].splice(filterIndex, 1); // 2nd parameter means remove one item only
+          }
+          if(currentFilters[2].length == 0){
+            currentFilters[2] = baseFilters[2]
+          }        
+        }
+        else{
+          currentFilters[2].push(filterData)
+        }
+        updateCharts();
     }); 
 
     loading.classList.remove("loading"); // Remove loading message
@@ -241,16 +376,28 @@ function getMapData(thisData){
   return returnData
 }
 
-function updateCharts(filteredData){
+function updateCharts(){
+  data = globalData
+  data = data.filter(function(d){
+    const dayOfWeek = getDay(d.REQUESTED_DATETIME);
+    const weekdayName = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][dayOfWeek];
+    return currentFilters[0].includes(weekdayName)
+  })
+  data = data.filter(function(d){
+    return currentFilters[1].includes(d.agencyFilter)
+  })
+  data = data.filter(function(d){
+    return currentFilters[2].includes(d.ZIPCODE)
+  })
   var loading = document.getElementById("loading");
   loading.classList.add("loading");
   setTimeout(function() {
-    lineChart.data = getLineData(filteredData);
-    zipChart.data = getZip(filteredData);
-    histogram.data = filteredData;
-    agencyChart.data = getAgency(filteredData);
-    daysOfTheWeek.data = getDayOfWeekData(filteredData);
-    map.data = getMapData(filteredData);
+    lineChart.data = getLineData(data);
+    zipChart.data = getZip(data);
+    histogram.data = data;
+    agencyChart.data = getAgency(data);
+    daysOfTheWeek.data = getDayOfWeekData(data);
+    map.data = getMapData(data);
     lineChart.updateVis();
     zipChart.updateVis();
     histogram.updateVis();
@@ -613,14 +760,14 @@ function getDayOfWeekData(thisData){
   function getAgency(thisData){
     var returnData = []
     returnData.push({"agency":"Water Works","count":0})
-    returnData.push({"agency":"Building Deptartment","count":0})
-    returnData.push({"agency":"Health Deptartment","count":0})
+    returnData.push({"agency":"Building Department","count":0})
+    returnData.push({"agency":"Health Department","count":0})
     returnData.push({"agency":"Manager's Office","count":0})
-    returnData.push({"agency":"Deptartment of Transportation","count":0})
-    returnData.push({"agency":"Fire and Police Deptartment","count":0})
-    returnData.push({"agency":"Park Deptartment","count":0})
+    returnData.push({"agency":"Department of Transportation","count":0})
+    returnData.push({"agency":"Fire and Police Department","count":0})
+    returnData.push({"agency":"Park Department","count":0})
     returnData.push({"agency":"Public Services","count":0})
-    returnData.push({"agency":"Law Deptartment","count":0})
+    returnData.push({"agency":"Law Department","count":0})
     returnData.push({"agency":"Other","count":0})
 
     for(var obj in thisData){

@@ -1,6 +1,6 @@
 class Line {
 
-  constructor(_config, _data) {
+  constructor(_config, _data,_refresh) {
     this.config = {
       parentElement: _config.parentElement,
       contextHeight: 40,
@@ -11,6 +11,7 @@ class Line {
     }
 
     this.data = _data;
+    this.refresh = _refresh;
 
     // Call a class function
     this.initVis();
@@ -111,9 +112,11 @@ class Line {
             .domain([startDate, d3.timeDay.offset(startDate, max)])
             .range([0, vis.width]);
 
-        vis.xScaleContext = d3.scaleLinear()
+        vis.xScaleContext = d3.scaleTime()
             .domain([startDate, d3.timeDay.offset(startDate, max)])
             .range([0, vis.width]);
+
+
 
         vis.yScaleFocus = d3.scaleLinear()
             .range([vis.height, 0])
@@ -198,15 +201,26 @@ class Line {
               if (selection) vis.brushed(selection);
             })
             .on('end', function({selection}) {
+
+                var xScaleContextInversed = d3.scaleTime()
+                    .range([startDate, d3.timeDay.offset(startDate, max)])
+                    .domain([0, vis.width]);
+                var xScaleContextInversedY = d3.scaleTime()
+                    .range([startDate, d3.timeDay.offset(startDate, max)])
+                    .domain([0, vis.width]);
+
+                var earlyDate = xScaleContextInversed(selection[0])
+                var lateDate = xScaleContextInversedY(selection[1])
+
               if (!selection) 
                 {
                 vis.brushed(null)
               }else if(selection[0] != 0 || selection[1] != vis.width){
-                 updateFromLine(vis.selectedDomain[0],vis.selectedDomain[1])
+                 vis.refresh(earlyDate,lateDate)
                  vis.static == false
               }
               else if(selection[0] == 0 && selection[1] == vis.width && vis.static == false){
-                 updateFromLine(vis.selectedDomain[0],vis.selectedDomain[1])
+                 vis.refresh(earlyDate,lateDate)
                  vis.static == true
               }
 
@@ -343,7 +357,7 @@ class Line {
         half = numMax/2
     }
     // Update the brush and define a default position
-    const defaultBrushSelection = [half, numMax];
+    const defaultBrushSelection = [0, numMax];
     
     if(vis.data.length>0){
     vis.brushG

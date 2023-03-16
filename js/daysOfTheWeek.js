@@ -156,6 +156,10 @@ class DaysOfTheWeek {
                 
 
     })
+     vis.xAxisInsert.on('click', (event, d) => {
+        d3.select('#tooltip').style('display', 'none')
+        vis.refresh(d);
+      })
 
     vis.rects
           .on('mouseover', (event,d) => {

@@ -4,8 +4,8 @@ class Histogram {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 500,
       containerHeight: _config.containerHeight || 140,
-      margin: { top: 40, bottom: 80, right: 20, left: 60 },
-      contextHeight: 30
+      margin: { top: 40, bottom: 60, right: 20, left: 60 },
+      contextHeight: 40
     }
     this.data = _data; 
     this.refresh = _refresh
@@ -175,7 +175,7 @@ vis.svg.append('g')
   .call(vis.brush) // initialize the brush
   .call(vis.brush.move, defaultBrushSelection)
   .selectAll('rect')
-  .attr('y', vis.config.margin.top + 10 + vis.height + vis.config.contextHeight)
+  .attr('y', vis.height + vis.config.contextHeight + vis.config.contextHeight/2)
   .attr('height', vis.config.contextHeight)
 vis.tooltipTrackingArea = vis.svg.append('rect')
             .attr('width', vis.width - vis.config.margin.left)

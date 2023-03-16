@@ -224,6 +224,11 @@ vis.xAxisInsert.on('mouseover', (event,d) => {
         vis.refresh(d.zip);
       })
 
+      vis.xAxisInsert.on('click', (event, d) => {
+        d3.select('#tooltip').style('display', 'none')
+        vis.refresh(d);
+      })
+
     vis.rects.transition()
         .duration(1000)
       .attr('y', (d) => vis.yScale(d.count) ) 
