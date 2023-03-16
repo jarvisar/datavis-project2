@@ -14,9 +14,12 @@
     <div id="loading">Loading...</div>
     <!-- Container for reset button -->
     <div class="top-container">
-      <div style= "display: flex; flex-wrap: nowrap; justify-content: left; margin-left: 50px;">
+      <div style= "display: flex; flex-wrap: nowrap; justify-content: left; margin-left: 30px;">
         <button id = "button1" class="cool-button" onclick="resetCharts()"/> Reset Charts </button>
-        <p id = "name" style="font-family: Roboto;margin-left: 5%;margin-top: 5%;align-self: center;color: #444;"> Use this button to reset data filters.</p> 
+        <div style= "display: flex; justify-content: left; flex-wrap: wrap;">
+            <p id = "name" style="font-family: Roboto;margin-left: 30px;margin-top: 24px;align-self: center;color: #444;"> Select a bar or label in any bar chart to filter data. </p> 
+            <p style="font-family: Roboto;margin-left: 30px; margin-top: 0px;align-self: center;color: #444;"> Use this button to reset data filters.</p> 
+        </div>  
       </div>  
     </div>
 	<!-- GitHub Button --> 
@@ -28,6 +31,13 @@
         <h1 id = "title" style="font-family: Roboto">Who you gonna call? 3-1-1!</h1>
         <p id = "name" style="font-family: Roboto; margin-bottom: 5px;">by Adam Jarvis & Ryan Logsdon</p> 
     </div>
+
+    <!-- Container for Info -->
+    <div class="info-container" style="text-align: center; color: #444">
+        <p id = "name" style="font-family: Roboto;margin-left: 5%;margin-top: 5%;align-self: center;color: #444;"> </p> 
+    </div>
+
+
 
     <!-- Top line divider -->
     <hr class="rounded" style="margin-top: 0px;">
