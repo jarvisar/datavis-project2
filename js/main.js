@@ -157,21 +157,26 @@ d3.csv('data/311_data_pt_2.csv')
 
     //create the map
     map = new LeafletMap({parentElement: '#my-map'}, getMapData(data), background_Url, background_Attr, (filteredData) => {
+      // only if filteredData is not null or undefined
+      if (filteredData) {
       var loading = document.getElementById("loading");
       loading.classList.add("loading");
-      setTimeout(function() {
+      setTimeout(function() { // Dont use updateCharts() because it will also update map
         lineChart.data = getLineData(filteredData);
         zipChart.data = getZip(filteredData);
         histogram.data = filteredData;
         agencyChart.data = getAgency(filteredData);
         daysOfTheWeek.data = getDayOfWeekData(filteredData);
         lineChart.updateVis();
-        zipChart.updateVis();
+        zipChart.updateVis();     // Skip updating map
         histogram.updateVis();
         agencyChart.updateVis();
         daysOfTheWeek.updateVis();
         loading.classList.remove("loading");
       }, 100);
+      } else { // If blank selection, just reset the charts
+        resetCharts();
+      }
     });
     updateMapColor();
 
@@ -409,6 +414,18 @@ function getMapData(thisData){
   }
   return returnData
 }
+
+var toggle = false;
+	d3.selectAll('.toggle-brush-button').on('click', function() {
+
+		if (toggle == false){
+			map.updateVis(true);
+			toggle = true
+		} else if (toggle == true) {
+			map.updateVis(false);
+			toggle = false
+		}
+	});
 
 function updateCharts(){
   data = globalData
