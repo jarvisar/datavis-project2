@@ -416,9 +416,8 @@ function getMapData(thisData){
   return returnData
 }
 
-var toggle = false;
+var toggle = false; // Toggle brush on and off
 	d3.selectAll('.toggle-brush-button').on('click', function() {
-
 		if (toggle == false){
 			map.updateVis(true);
 			toggle = true
@@ -426,6 +425,13 @@ var toggle = false;
 			map.updateVis(false);
 			toggle = false
 		}
+
+    // NOTE: Currently the brush works at filtering the data, but for some reason
+    // the original data is reloaded for the bar charts a split second after the filtered
+    // data is loaded. Not sure why barcharts are being loaded twice. (Works fine with histogram and timeline)
+
+    // Also noticed if I put a console.log in any of the barcharts get() data functions (such as getZip, getAgency, etc)
+    // the console.log is called twice, so they are being loaded twice when the site is first loaded.
 	});
 
 function updateCharts(){
