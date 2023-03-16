@@ -237,7 +237,9 @@ class LeafletMap {
     // disable the brush
     d3.selectAll(".brush").remove();
     vis.brushEnabled = false;
-    vis.refresh(); // reset data
+    if (vis.filteredData != null && vis.filteredData.length > 0) {
+      vis.refresh(vis.filteredData);
+    }
   }
 
     

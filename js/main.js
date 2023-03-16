@@ -505,7 +505,7 @@ function resetCharts(){
     histogram.updateVis();
     agencyChart.updateVis();
     daysOfTheWeek.updateVis();
-    map.updateVis();
+    map.updateVis(false); // disable brush by default
     loading.classList.remove("loading");
     return returnData
     }, 100);
