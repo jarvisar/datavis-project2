@@ -160,6 +160,7 @@ d3.csv('data/311_data_pt_2.csv')
       // only if filteredData is not null or undefined
       if (filteredData) {
       var loading = document.getElementById("loading");
+      console.log("TEST!")
       loading.classList.add("loading");
       setTimeout(function() { // Dont use updateCharts() because it will also update map
         lineChart.data = getLineData(filteredData);
@@ -428,21 +429,21 @@ var toggle = false;
 	});
 
 function updateCharts(){
-  data = globalData
-  data = data.filter(function(d){
-    const dayOfWeek = getDay(d.REQUESTED_DATETIME);
-    const weekdayName = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][dayOfWeek];
-    return currentFilters[0].includes(weekdayName)
-  })
-  data = data.filter(function(d){
-    return currentFilters[1].includes(d.agencyFilter)
-  })
-  data = data.filter(function(d){
-    return currentFilters[2].includes(d.ZIPCODE)
-  })
   var loading = document.getElementById("loading");
   loading.classList.add("loading");
   setTimeout(function() {
+    data = globalData
+    data = data.filter(function(d){
+      const dayOfWeek = getDay(d.REQUESTED_DATETIME);
+      const weekdayName = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][dayOfWeek];
+      return currentFilters[0].includes(weekdayName)
+    })
+    data = data.filter(function(d){
+      return currentFilters[1].includes(d.agencyFilter)
+    })
+    data = data.filter(function(d){
+      return currentFilters[2].includes(d.ZIPCODE)
+    })
     lineChart.data = getLineData(data);
     zipChart.data = getZip(data);
     histogram.data = data;
@@ -750,7 +751,7 @@ function dayOfTheYear(dateString){
 function getLineData(thisData){
     //console.log(data)
     //lets compute costs per year for the line chart
-    
+    console.log("TEST!")
     let requestsPerDay = [];
     for(var i = 0; i < 731; i++){
       requestsPerDay.push( {"day": i, "num":0});
@@ -872,6 +873,7 @@ function getDayOfWeekData(thisData){
   //Zipcode Data
   function getZip(thisData){
     var returnData = []
+    console.log("TEST")
     returnData.push({"zip":"45202","count":0})
     returnData.push({"zip":"45203","count":0})
     returnData.push({"zip":"45204","count":0})

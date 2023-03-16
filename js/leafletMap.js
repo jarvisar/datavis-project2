@@ -14,6 +14,7 @@ class LeafletMap {
     this.background_Url = _background_Url
     this.background_Attr = _background_Attr
     this.brushEnabled = false; // brush disabled by default
+    this.filteredData
     this.initVis();
   }
   
@@ -133,7 +134,41 @@ class LeafletMap {
       vis.updateVis();
     });
 
+    vis.brush = d3.brush()
+    .extent([[0, 0], [vis.theMap.getSize().x, vis.theMap.getSize().y]])
+    .on("start brush", brushed)
+    .on("end", brushEnd);
 
+    function brushed(event) {
+      // Get the current brush selection and convert it to lat/lon coordinates
+      let selection = event.selection;
+      let bounds = L.latLngBounds(
+        vis.theMap.layerPointToLatLng([selection[0][0], selection[0][1]]),
+        vis.theMap.layerPointToLatLng([selection[1][0], selection[1][1]])
+      );
+    
+      // Filter your data based on the brush selection
+      vis.filteredData = vis.data.filter(d => bounds.contains([d.latitude, d.longitude]));
+    
+      // Update the visualization with the filtered data
+      vis.Dots = vis.svg.selectAll('circle')
+        .attr("stroke", d => bounds.contains([d.latitude, d.longitude]) ? "white" : "black");
+    }
+
+    function brushEnd(event){
+      let selection = event.selection;
+      let bounds = L.latLngBounds(
+        vis.theMap.layerPointToLatLng([selection[0][0], selection[0][1]]),
+        vis.theMap.layerPointToLatLng([selection[1][0], selection[1][1]])
+      );
+
+      vis.Dots = vis.svg.selectAll('circle')
+        .attr("stroke", d => bounds.contains([d.latitude, d.longitude]) ? "white" : "black");
+    
+      // Filter your data based on the brush selection
+      
+      vis.refresh(vis.filteredData);
+    }
 
     var fullscreen = new L.Control.Fullscreen();
     vis.theMap.addControl(fullscreen);
@@ -185,10 +220,6 @@ class LeafletMap {
                     .attr("stroke", "black") ;
 
   
-  vis.brush = d3.brush()
-    .extent([[0, 0], [vis.theMap.getSize().x, vis.theMap.getSize().y]])
-    .on("start brush", brushed)
-    .on("end", brushEnd);
 
   // Uncomment this to enable brush. Currently disabled because it prevents tooltips from appearing
   // Maybe add toggle button to toggle brush?
@@ -206,47 +237,10 @@ class LeafletMap {
     // disable the brush
     d3.selectAll(".brush").remove();
     vis.brushEnabled = false;
-    vis.refresh();
+    //vis.refresh();
   }
 
-  function brushed(event) {
-      // Get the current brush selection and convert it to lat/lon coordinates
-      let selection = event.selection;
-      if (event.selection) {
-        // Disable mouse events on SVG overlay
-        vis.svg.attr("pointer-events", "none");
-      } else {
-        // Enable mouse events on SVG overlay
-        vis.svg.attr("pointer-events", "auto");
-      }
-      let bounds = L.latLngBounds(
-        vis.theMap.layerPointToLatLng([selection[0][0], selection[0][1]]),
-        vis.theMap.layerPointToLatLng([selection[1][0], selection[1][1]])
-      );
     
-      // Filter your data based on the brush selection
-      let filteredData = vis.data.filter(d => bounds.contains([d.latitude, d.longitude]));
-    
-      // Update the visualization with the filtered data
-      vis.Dots = vis.svg.selectAll('circle')
-        .attr("stroke", d => bounds.contains([d.latitude, d.longitude]) ? "white" : "black");
-    }
-
-    function brushEnd(event){
-      let selection = event.selection;
-      let bounds = L.latLngBounds(
-        vis.theMap.layerPointToLatLng([selection[0][0], selection[0][1]]),
-        vis.theMap.layerPointToLatLng([selection[1][0], selection[1][1]])
-      );
-
-      vis.Dots = vis.svg.selectAll('circle')
-        .attr("stroke", d => bounds.contains([d.latitude, d.longitude]) ? "white" : "black");
-    
-      // Filter your data based on the brush selection
-      let filteredData = vis.data.filter(d => bounds.contains([d.latitude, d.longitude]));
-        console.log(filteredData);
-      vis.refresh(filteredData);
-    }
   }
 
 
