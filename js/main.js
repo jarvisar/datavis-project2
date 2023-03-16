@@ -158,11 +158,11 @@ d3.csv('data/311_data_pt_2.csv')
     //create the map
     map = new LeafletMap({parentElement: '#my-map'}, getMapData(data), background_Url, background_Attr, (filteredData) => {
       // only if filteredData is not null or undefined
-      if (filteredData) {
       var loading = document.getElementById("loading");
       console.log("TEST!")
       loading.classList.add("loading");
       setTimeout(function() { // Dont use updateCharts() because it will also update map
+        if (filteredData) {
         lineChart.data = getLineData(filteredData);
         zipChart.data = getZip(filteredData);
         histogram.data = filteredData;
@@ -174,10 +174,10 @@ d3.csv('data/311_data_pt_2.csv')
         agencyChart.updateVis();
         daysOfTheWeek.updateVis();
         loading.classList.remove("loading");
+        } else { // If blank selection, just reset the charts
+          resetCharts();
+        }
       }, 100);
-      } else { // If blank selection, just reset the charts
-        resetCharts();
-      }
     });
     updateMapColor();
 
@@ -873,7 +873,6 @@ function getDayOfWeekData(thisData){
   //Zipcode Data
   function getZip(thisData){
     var returnData = []
-    console.log("TEST")
     returnData.push({"zip":"45202","count":0})
     returnData.push({"zip":"45203","count":0})
     returnData.push({"zip":"45204","count":0})
