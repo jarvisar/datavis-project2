@@ -121,7 +121,7 @@ class Zipcode {
         .style("color", "black")
         .style("font-size", "12px")
         .attr("dx", "-0.5em")
-        .attr("dy", "1em")
+        .attr("dy", ".4em")
         .attr("transform", "rotate(-40)")
         
 
