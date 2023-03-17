@@ -356,3 +356,39 @@ hr.rounded {
 	display: block;
 	opacity: 1;
 }
+
+.apply-brush-button{
+  position: absolute;
+  top: -17px;
+  right: -197px;
+  z-index: 10;
+}
+
+/* Reset button style */
+.apply-brush-button{
+  height: 25px;
+  width: 90px;
+  font-size: 12px;;
+  background-color: #118AB2;
+  color: #eaeaea;
+  border-radius: 5px;
+  border: transparent;
+  margin-top: 20px;
+  box-shadow: 0px 1px 0.5px #bbbbbb, 0px 2px 0.5px #bbbbbb, 0px 3px 0.5px #bbbbbb;
+  transform: translateY(-2px);
+  transition: 0.1s transform, 0.1s box-shadow;
+}
+
+.apply-brush-button:hover{
+  box-shadow: 0px 1px 0.5px #aaaaaa, 0px 2px 0.5px #aaaaaa;
+  transform: translateY(-1px);
+  cursor: pointer;
+}
+
+.apply-brush-button:active{
+  box-shadow: 0px 1px 0.5px #999999;
+  transform: translateY(0px);
+  color: #dadada;
+  cursor: pointer;
+}
+
