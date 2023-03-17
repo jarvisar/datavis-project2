@@ -12,7 +12,7 @@ class Line {
 
     this.data = _data;
     this.refresh = _refresh;
-
+    this.empty = false;
     // Call a class function
     this.initVis();
   }
@@ -106,11 +106,11 @@ class Line {
             .nice();
         let yMin = d3.min(vis.data, d => d.num)
         let yMax = d3.max(vis.data, d => d.num)
-        var empty = false;
+        
         if(yMin==null || yMax ==0){
             yMin = 0
             yMax = 1
-            empty = true;
+            vis.empty = true;
             vis.svg.append('text')
               .attr('class', 'no-data-text')
               .attr('transform', `translate(${(vis.width / 2)+40}, ${(vis.height / 2)+40})`)
@@ -273,7 +273,7 @@ class Line {
 
         vis.bisectDate = d3.bisector(vis.xValue).left;
 
-    if(!empty){
+    if(!vis.empty){
         vis.focusLinePath
             .datum(vis.data)
             .attr('class','chart')
@@ -410,7 +410,7 @@ class Line {
           yMax = yData[i].num
         }
       }
-      if(yMax == 0){
+      if(vis.empty){
         d3.selectAll(".line-brush").remove();
         vis.yScaleFocus.domain([0,1]);
       } 
