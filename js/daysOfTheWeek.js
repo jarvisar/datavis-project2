@@ -65,15 +65,33 @@ class DaysOfTheWeek {
     vis.svg.selectAll('.x-axis').remove();
     vis.svg.selectAll('.chart').remove();
     vis.svg.selectAll('.plan').remove();
+    vis.svg.selectAll('.no-data-text').remove();
 
     vis.chart = vis.svg.append('g')
         .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`).attr('class', 'chart');
+
+    var max = d3.max( vis.data, d => d.count)
+    var empty = false;
+    if(max ==0){
+        //do this so it looks good when there is no data
+        max = 1;
+        empty = true;
+         // Add text in the center of the chart if there is no data
+            vis.chart.append('text')
+              .attr('class', 'no-data-text')
+              .attr('transform', `translate(${vis.width / 2}, ${vis.height / 2})`)
+              .attr('text-anchor', 'middle')
+              .text('No Data to Display')
+              .style("font-family", "Roboto")
+                .style("color", "black")
+                .style("font-size", "14px");
+    }
     vis.xScale = d3.scaleBand()
         .domain(vis.data.map(function(d) { return d.day; }))
         .range([0, vis.width])
         .padding(0.4);
     vis.yScale = d3.scaleLinear()
-        .domain([0, d3.max( vis.data, d => d.count)])
+        .domain([0, max])
         .range([vis.height, 0])
         .nice();
     // Initialize axes
@@ -137,29 +155,38 @@ class DaysOfTheWeek {
       .attr('y', vis.height)
       .attr('height', 0)
 
-    vis.xAxisInsert.on('mouseover', (event,d) => {
-        var thisCount = 0;
-        for(var obj in vis.data){
-            if(vis.data[obj].day ==d){
-                thisCount = vis.data[obj].count
+    if(!empty){
+        vis.xAxisInsert.on('mouseover', (event,d) => {
+            var thisCount = 0;
+            for(var obj in vis.data){
+                if(vis.data[obj].day ==d){
+                    thisCount = vis.data[obj].count
+                }
             }
-        }
-        d3.select('#tooltip')
-            .style('display', 'block')
-            .style('left', event.pageX + 5 + 'px')   
-            .style('top', event.pageY - 20 + 'px')
-            .style('opacity', 1)
-            .html(`
-              <div class="tooltip-title"  style="font-weight: 600;">Day of the Week: ${d}</div>
-              <div style="font-weight: 300;">Calls: ${thisCount}</div>
-            `);
-                
+            d3.select("#byPlan"+ d)
+                .style("filter", "brightness(70%)");
+            d3.select('#tooltip')
+                .style('display', 'block')
+                .style('left', event.pageX + 5 + 'px')   
+                .style('top', event.pageY - 20 + 'px')
+                .style('opacity', 1)
+                .html(`
+                  <div class="tooltip-title"  style="font-weight: 600;">Day of the Week: ${d}</div>
+                  <div style="font-weight: 300;">Calls: ${thisCount}</div>
+                `);
+                    
 
-    })
-     vis.xAxisInsert.on('click', (event, d) => {
-        d3.select('#tooltip').style('display', 'none')
-        vis.refresh(d);
-      })
+        })
+        .on('mouseleave', () => {
+              d3.select('#tooltip').style('display', 'none');
+              d3.selectAll("rect")
+                .style("filter", "brightness(100%)");
+            });
+         vis.xAxisInsert.on('click', (event, d) => {
+            d3.select('#tooltip').style('display', 'none')
+            vis.refresh(d);
+          })
+     }
 
     vis.rects
           .on('mouseover', (event,d) => {

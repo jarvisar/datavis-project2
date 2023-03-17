@@ -1,5 +1,6 @@
 //Global Variables to hold data before/after filtering
 var globalData =[];
+let mapData;
 let data;
 let map;
 let background_Url = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
@@ -154,15 +155,18 @@ d3.csv('data/311_data_pt_2.csv')
       globalData.push(d)
     });
 
+    mapData = globalData;
+
 
     //create the map
     map = new LeafletMap({parentElement: '#my-map'}, getMapData(data), background_Url, background_Attr, (filteredData) => {
       // only if filteredData is not null or undefined
       var loading = document.getElementById("loading");
-      console.log("TEST!")
+      console.log("Map filter Data!")
       loading.classList.add("loading");
       setTimeout(function() { // Dont use updateCharts() because it will also update map
         if (filteredData) {
+        mapData = filteredData
         lineChart.data = getLineData(filteredData);
         zipChart.data = getZip(filteredData);
         histogram.data = filteredData;
@@ -422,7 +426,7 @@ var toggle = false; // Toggle brush on and off
 			map.updateVis(true);
 			toggle = true
 		} else if (toggle == true) {
-			map.updateVis(false);
+      map.updateVis(false);
 			toggle = false
 		}
 
@@ -438,7 +442,7 @@ function updateCharts(){
   var loading = document.getElementById("loading");
   loading.classList.add("loading");
   setTimeout(function() {
-    data = globalData
+    data = mapData;
     data = data.filter(function(d){
       const dayOfWeek = getDay(d.REQUESTED_DATETIME);
       const weekdayName = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][dayOfWeek];
@@ -473,47 +477,48 @@ function resetCharts(){
     var loading = document.getElementById("loading");
     loading.classList.add("loading");
     setTimeout(function() {
-    //reset dropdown
-    const dropdown = document.getElementById("dropdown");
-    dropdown.value = "option1";
+      //reset dropdown
+      const dropdown = document.getElementById("dropdown");
+      dropdown.value = "option1";
 
-    const dropdown2 = document.getElementById("map-layer-dropdown");
-    dropdown2.value = "Terrain";
+      const dropdown2 = document.getElementById("map-layer-dropdown");
+      dropdown2.value = "Terrain";
 
-    //set legend
-    document.getElementById("option1-legend").style.display = "inline-block";
-    document.getElementById("option2-legend").style.display = "none";
-    document.getElementById("option3-legend").style.display = "none";
-    document.getElementById("option4-legend").style.display = "none";
+      //set legend
+      document.getElementById("option1-legend").style.display = "inline-block";
+      document.getElementById("option2-legend").style.display = "none";
+      document.getElementById("option3-legend").style.display = "none";
+      document.getElementById("option4-legend").style.display = "none";
 
-    // remove inactive from all legend buttons
-    d3.selectAll('.legend-btn').classed('inactive', false); 
+      // remove inactive from all legend buttons
+      d3.selectAll('.legend-btn').classed('inactive', false); 
 
-    //reset backfround
-    background_1_Url = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
-    background_1_Attr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+      //reset backfround
+      background_1_Url = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
+      background_1_Attr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
-    map.background_Url = background_1_Url
-    map.background_Attr = background_1_Attr
+      map.background_Url = background_1_Url
+      map.background_Attr = background_1_Attr
+      map.filteredData = [];
 
-    //reset map -- update vis is always called when the color is updated
-    updateMapColor();
+      //reset map -- update vis is always called when the color is updated
+      data = globalData;
+      updateMapColor();
 
-    //TO-DO
-    lineChart.data = getLineData(data);
-    zipChart.data = getZip(data);
-    histogram.data = data;
-    agencyChart.data = getAgency(data);
-    daysOfTheWeek.data = getDayOfWeekData(data);
-    map.data = getMapData(data);
-    lineChart.updateVis();
-    zipChart.updateVis();
-    histogram.updateVis();
-    agencyChart.updateVis();
-    daysOfTheWeek.updateVis();
-    map.updateVis(false); // disable brush by default
-    loading.classList.remove("loading");
-    return returnData
+
+      //TO-DO
+      lineChart.data = getLineData(globalData);
+      zipChart.data = getZip(globalData);
+      histogram.data = globalData;
+      agencyChart.data = getAgency(globalData);
+      daysOfTheWeek.data = getDayOfWeekData(globalData);
+      lineChart.updateVis();
+      zipChart.updateVis();
+      histogram.updateVis();
+      agencyChart.updateVis();
+      daysOfTheWeek.updateVis();
+      loading.classList.remove("loading");
+      return returnData
     }, 100);
   }
 
@@ -703,7 +708,7 @@ function updateMapColor(){
 
     data = returnData;
     map.data = returnData;
-    map.updateVis();
+    map.updateVis(false); // disable brush by default
   }
 
   function updateMapType(){
@@ -757,7 +762,7 @@ function dayOfTheYear(dateString){
 function getLineData(thisData){
     //console.log(data)
     //lets compute costs per year for the line chart
-    console.log("TEST!")
+    console.log("line chart data!")
     let requestsPerDay = [];
     for(var i = 0; i < 731; i++){
       requestsPerDay.push( {"day": i, "num":0});
@@ -777,18 +782,10 @@ function getLineData(thisData){
     return requestsPerDay
   }
 
-  function updateFromLine(date1,date2){
-      //console.log("line")
-        let min = Math.trunc(Math.round(parseFloat(date1)* 10)/10)
-        let max = Math.trunc(Math.round(parseFloat(date2) * 10)/10)
-        lineData = data;
-        lineData = lineData.filter(d => d.REQUESTED_DATETIME >= min)
-        lineData = lineData.filter(d => d.REQUESTED_DATETIME <= max)
-        //ToDO
-  }
 
 //Function to get day of week data
 function getDayOfWeekData(thisData){
+  console.log("Day of Week Reset")
     var returnData = []
     returnData.push({"day":"Monday","count":0})
     returnData.push({"day":"Tuesday","count":0})

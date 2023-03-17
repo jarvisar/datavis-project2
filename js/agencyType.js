@@ -61,15 +61,32 @@ class AgencyType {
     vis.svg.selectAll('.x-axis').remove();
     vis.svg.selectAll('.chart').remove();
     vis.svg.selectAll('.plan').remove();
+    vis.svg.selectAll('.no-data-text').remove();
     
     
     vis.yScale = d3.scaleBand()
         .domain(vis.data.map(function(d) { return d.agency; }))
         .range([vis.height, 0])
         .padding(0.4);
-    
+    var max = d3.max( vis.data, d => d.count)
+    var clearLabel = false
+    if(max ==0){
+        //do this so it looks good when there is no data
+        max = 1;
+        clearLabel = true
+
+         // Add text in the center of the chart if there is no data
+            vis.chart.append('text')
+              .attr('class', 'no-data-text')
+              .attr('transform', `translate(${vis.width / 2}, ${vis.height / 2})`)
+              .attr('text-anchor', 'middle')
+              .text('No Data to Display')
+              .style("font-family", "Roboto")
+                .style("color", "black")
+                .style("font-size", "14px");
+    }
     vis.xScale = d3.scaleLinear()
-        .domain([0, d3.max( vis.data, d => d.count)])
+        .domain([0, max])
         .range([0, vis.width])
         .nice();
     // Initialize axes
@@ -136,40 +153,54 @@ class AgencyType {
           d3.selectAll("rect")
             .style("filter", "brightness(100%)");
         });
-    // y axis
-    vis.label = vis.svg.append('g')
-        .attr('class', 'x-axis')
-        .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`)
-        .call(d3.axisLeft(vis.yScale))
-        .selectAll("text")
-        .style("text-anchor", "start")
-        .style("word-wrap", "break-word")
-        .style("font-family", "Roboto")
-        .style("color", "black")
-        .style("font-size", "11px")
-        .attr("dx", "1.2em")
-        .attr("dy", ".4em")
 
-    vis.label
-          .on('mouseover', (event,d) => {
-        d3.select("#byDisc" + d.replace(/\s/g, '').replace(/[^a-zA-Z]/g, ''))
-            .style("filter", "brightness(70%)");
-          d3.select('#tooltip')
-            .style('display', 'block')
-            .style('left', event.pageX + 10 + 'px')   
-            .style('top', event.pageY + 'px')
-            .style('opacity', 1)
-            .attr('data-value',d)
-            .html(`
-              <div class="tooltip-title" style="font-weight: 600;">Agency: ${d}</div>
-              <div >Calls: ${vis.data.filter(data => data.agency === d)[0].count}</div>
-            `);
-        })
-        .on('mouseleave', () => {
-          d3.select('#tooltip').style('display', 'none');
-          d3.selectAll("rect")
-            .style("filter", "brightness(100%)");
-        });
+    if(!clearLabel){
+
+        // y axis
+        vis.label = vis.svg.append('g')
+            .attr('class', 'x-axis')
+            .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`)
+            .call(d3.axisLeft(vis.yScale))
+            .selectAll("text")
+            .style("text-anchor", "start")
+            .style("word-wrap", "break-word")
+            .style("font-family", "Roboto")
+            .style("color", "black")
+            .style("font-size", "11px")
+            .attr("dx", "1.2em")
+            .attr("dy", ".4em")
+
+        vis.label
+              .on('mouseover', (event,d) => {
+            d3.select("#byDisc" + d.replace(/\s/g, '').replace(/[^a-zA-Z]/g, ''))
+                .style("filter", "brightness(70%)");
+              d3.select('#tooltip')
+                .style('display', 'block')
+                .style('left', event.pageX + 10 + 'px')   
+                .style('top', event.pageY + 'px')
+                .style('opacity', 1)
+                .attr('data-value',d)
+                .html(`
+                  <div class="tooltip-title" style="font-weight: 600;">Agency: ${d}</div>
+                  <div >Calls: ${vis.data.filter(data => data.agency === d)[0].count}</div>
+                `);
+            })
+            .on('mouseleave', () => {
+              d3.select('#tooltip').style('display', 'none');
+              d3.selectAll("rect")
+                .style("filter", "brightness(100%)");
+            })
+    }
+    else{
+        vis.label = vis.svg.append('g')
+            .attr('class', 'x-axis')
+            .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`)
+            .call(d3.axisLeft(vis.yScale))
+            .selectAll("text")
+            .style("color", "white")
+            .style("font-size", "1px")
+            .attr("dx", "-100.2em")
+    }
 
 
     // Add the x axisS
@@ -196,6 +227,7 @@ class AgencyType {
         .duration(1000)
         .attr('width', (d) => vis.xScale(d.count));
 
+    
     vis.renderVis();
   }
 

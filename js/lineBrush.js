@@ -34,7 +34,7 @@ class Line {
 
     //Title
     vis.svg.append("text")
-       .attr('transform', `translate(${(vis.width - vis.config.margin.left - vis.config.margin.right)/2}, ${vis.config.margin.top -20 })`)
+       .attr('transform', `translate(${(vis.width - vis.config.margin.left - vis.config.margin.right)/2.1}, ${vis.config.margin.top -20 })`)
        .attr("font-size", "20px")
        .text("Calls Placed Over 2022")
        .style("font-family", "Roboto")
@@ -47,16 +47,16 @@ class Line {
        .text("Date Of Call")
        .style("font-family", "Roboto")
         .style("color", "black")
-        .style("font-size", "16px");
+        .style("font-size", "14px");
     vis.svg.append("text")
        .attr("transform", "rotate(-90)")
-       .attr("x", -(vis.height/2) - vis.config.margin.top)
+       .attr("x", -(vis.height/2) - vis.config.margin.top -10)
        .attr("y", 15)
        .style("text-anchor", "middle")
        .text("Number of Calls Placed")
        .style("font-family", "Roboto")
         .style("color", "black")
-        .style("font-size", "16px");
+        .style("font-size", "14px");
     vis.xAxisLine = vis.svg.append("line")
         .attr("x1", vis.config.margin.left)
         .attr("y1", vis.height + vis.config.margin.top)
@@ -78,6 +78,7 @@ class Line {
   }
   updateVis() { 
         let vis = this;
+        vis.svg.selectAll('.no-data-text').remove();
         vis.svg.selectAll('.y-axis').remove();
         vis.svg.selectAll('.x-axis').remove();
         vis.svg.selectAll('.chart').remove();
@@ -100,11 +101,28 @@ class Line {
             min = 1992
             max = 2022
         }
+        vis.yScaleFocus = d3.scaleLinear()
+            .range([vis.height, 0])
+            .nice();
         let yMin = d3.min(vis.data, d => d.num)
         let yMax = d3.max(vis.data, d => d.num)
-        if(yMin==null){
+        var empty = false;
+        if(yMin==null || yMax ==0){
             yMin = 0
             yMax = 1
+            empty = true;
+            vis.svg.append('text')
+              .attr('class', 'no-data-text')
+              .attr('transform', `translate(${(vis.width / 2)+40}, ${(vis.height / 2)+40})`)
+              .attr('text-anchor', 'middle')
+              .text('No Data to Display')
+              .style("font-family", "Roboto")
+                .style("color", "black")
+                .style("font-size", "14px");
+            vis.yScaleFocus.domain([0,1]);
+        }
+        else{
+            vis.yScaleFocus.domain(d3.extent(vis.data, vis.yValue));
         }
         const startDate = new Date(2021,0,min + 2);
 
@@ -118,9 +136,7 @@ class Line {
 
 
 
-        vis.yScaleFocus = d3.scaleLinear()
-            .range([vis.height, 0])
-            .nice();
+        
 
         vis.yScaleContext = d3.scaleLinear()
             .range([vis.config.contextHeight, 0])
@@ -191,7 +207,7 @@ class Line {
             .attr('transform', `translate(0,${vis.config.contextHeight})`);
 
         vis.brushG = vis.context.append('g')
-            .attr('class', 'chart');
+            .attr('class', 'line-brush');
 
 
         // Initialize brush component
@@ -251,21 +267,32 @@ class Line {
 
         // Set the scale input domains
         vis.xScaleFocus.domain(d3.extent(vis.data, vis.xValue));
-        vis.yScaleFocus.domain(d3.extent(vis.data, vis.yValue));
+        
         vis.xScaleContext.domain(vis.xScaleFocus.domain());
         vis.yScaleContext.domain(vis.yScaleFocus.domain());
 
         vis.bisectDate = d3.bisector(vis.xValue).left;
 
-
-    vis.focusLinePath
+    if(!empty){
+        vis.focusLinePath
+            .datum(vis.data)
+            .attr('class','chart')
+            .attr('stroke',  '#d1123f')
+            .attr('stroke-width', 2)
+            .attr('fill', 'none')
+            .attr('d', vis.lineBase)
+            .attr("clip-path", "url(#clip)")
+    }
+    else{
+        vis.focusLinePath
         .datum(vis.data)
         .attr('class','chart')
-        .attr('stroke',  '#d1123f')
-        .attr('stroke-width', 2)
+        .attr('stroke',  'black')
+        .attr('stroke-width', 0)
         .attr('fill', 'none')
         .attr('d', vis.lineBase)
         .attr("clip-path", "url(#clip)")
+    }
 
     vis.focusLinePath.transition()
         .duration(1000)
@@ -382,8 +409,14 @@ class Line {
         if(yData[i].num>yMax){
           yMax = yData[i].num
         }
+      }
+      if(yMax == 0){
+        d3.selectAll(".line-brush").remove();
+        vis.yScaleFocus.domain([0,1]);
       } 
-      vis.yScaleFocus.domain([0,yMax]);
+      else{
+        vis.yScaleFocus.domain([0,yMax]);
+      }
       
 
     } else {

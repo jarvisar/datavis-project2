@@ -131,7 +131,7 @@ class LeafletMap {
     
     //handler here for updating the map, as you zoom in and out           
     vis.theMap.on("zoomend", function(){
-      vis.updateVis();
+      vis.updateVis(vis.brushEnabled);
     });
 
     vis.brush = d3.brush()

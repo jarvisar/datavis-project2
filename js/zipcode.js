@@ -26,7 +26,7 @@ class Zipcode {
 
         //Title
     vis.svg.append("text")
-       .attr('transform', `translate(${vis.width/1.80}, ${vis.config.margin.top -20 })`)
+       .attr('transform', `translate(${vis.width/1.75}, ${vis.config.margin.top -20 })`)
        .style("text-anchor", "middle")
        .text("Calls by ZIP Code")
        .style("font-family", "Roboto")
@@ -83,6 +83,7 @@ class Zipcode {
     vis.svg.selectAll('.x-axis').remove();
     vis.svg.selectAll('.chart').remove();
     vis.svg.selectAll('.plan').remove();
+    vis.svg.selectAll('.no-data-text').remove();
 
     vis.chart = vis.svg.append('g')
         .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`).attr('class', 'chart');
@@ -90,8 +91,26 @@ class Zipcode {
         .domain(vis.data.map(function(d) { return d.zip; }))
         .range([0, vis.width])
         .padding(0.4);
+    var empty = false;
+    var max = d3.max( vis.data, d => d.count)
+    if(max ==0){
+        //do this so it looks good when there is no data
+        max = 1;
+        empty = true;
+
+         // Add text in the center of the chart if there is no data
+            vis.chart.append('text')
+              .attr('class', 'no-data-text')
+              .attr('transform', `translate(${vis.width / 2}, ${vis.height / 2})`)
+              .attr('text-anchor', 'middle')
+              .text('No Data to Display')
+              .style("font-family", "Roboto")
+                .style("color", "black")
+                .style("font-size", "14px");
+    }
+
     vis.yScale = d3.scaleLinear()
-        .domain([0, d3.max( vis.data, d => d.count)])
+        .domain([0, max])
         .range([vis.height, 0])
         .nice();
     // Initialize axes
@@ -154,14 +173,17 @@ class Zipcode {
       .attr('class',"plan")
       .attr('y', vis.height)
       .attr('height', 0)
-vis.xAxisInsert.on('mouseover', (event,d) => {
-    var thisCount = 0;
-    for(var obj in vis.data){
-        if(vis.data[obj].zip ==d){
-            thisCount = vis.data[obj].count
-        }
-    }
-    if(Number(d) < 45235){
+    if(!empty){
+        vis.xAxisInsert.on('mouseover', (event,d) => {
+            var thisCount = 0;
+            for(var obj in vis.data){
+                if(vis.data[obj].zip ==d){
+                    thisCount = vis.data[obj].count
+                }
+            }
+            d3.select("#byPlan"+ d)
+                    .style("filter", "brightness(70%)");
+            if(Number(d) < 45235){
               d3.select('#tooltip')
                 .style('display', 'block')
                 .style('left', event.pageX + 5 + 'px')   
@@ -184,7 +206,13 @@ vis.xAxisInsert.on('mouseover', (event,d) => {
                 `);
             }
 
-})
+        })
+        .on('mouseleave', () => {
+          d3.select('#tooltip').style('display', 'none');
+          d3.selectAll("rect")
+            .style("filter", "brightness(100%)");
+        });
+    }
     vis.rects
           .on('mouseover', (event,d) => {
         d3.select("#byPlan"+ d.zip)
@@ -223,11 +251,12 @@ vis.xAxisInsert.on('mouseover', (event,d) => {
         d3.select('#tooltip').style('display', 'none')
         vis.refresh(d.zip);
       })
-
-      vis.xAxisInsert.on('click', (event, d) => {
-        d3.select('#tooltip').style('display', 'none')
-        vis.refresh(d);
-      })
+      if(!empty){
+          vis.xAxisInsert.on('click', (event, d) => {
+            d3.select('#tooltip').style('display', 'none')
+            vis.refresh(d);
+          })
+      }
 
     vis.rects.transition()
         .duration(1000)

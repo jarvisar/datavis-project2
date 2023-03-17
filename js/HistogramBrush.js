@@ -28,7 +28,7 @@ class Histogram {
 
     //Title
     vis.svg.append("text")
-       .attr('transform', `translate(${(vis.width)/2.4}, ${vis.config.margin.top -20 })`)
+       .attr('transform', `translate(${(vis.width)/2.55}, ${vis.config.margin.top -20 })`)
        .attr("font-size", "20px")
        .text("Response Time of Calls")
        .style("font-family", "Roboto")
@@ -51,7 +51,7 @@ class Histogram {
        .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "14px");
-vis.static = true;
+      vis.static = true;
       vis.updateVis(); 
   }
   /**
@@ -59,6 +59,7 @@ vis.static = true;
    */
   updateVis() {
     let vis = this;
+    vis.svg.selectAll('.no-data-text').remove();
     vis.svg.selectAll('.y-axis').remove();
     vis.svg.selectAll('.x-axis').remove();
     vis.svg.selectAll('.chart').remove();
@@ -83,6 +84,15 @@ vis.bins = histogram(vis.data);
 let max = d3.max(vis.bins, function(d) { return d.length; })
 if(max==0){
   max = 1
+  // Add text in the center of the chart if there is no data
+            vis.svg.append('text')
+              .attr('class', 'no-data-text')
+              .attr('transform', `translate(${(vis.width / 2)+15}, ${(vis.height / 2)+40})`)
+              .attr('text-anchor', 'middle')
+              .text('No Data to Display')
+              .style("font-family", "Roboto")
+                .style("color", "black")
+                .style("font-size", "14px");
 }
 // Y axis: scale and draw:
 vis.y = d3.scaleLinear()
@@ -136,19 +146,19 @@ vis.brush = d3.brushX()
     .on('end', function({selection}) {
       let s1 = selection[0]
       let s2 = selection[1]
-      if(isNaN(selection[0])){s1 = vis.config.margin.left}
-      if(isNaN(selection[1])){s2 = max} 
+      if(isNaN(selection[0])){selection[0] = vis.config.margin.left}
+      if(isNaN(selection[1])){selection[1] = max} 
 
       s1 = vis.xContext.invert(s1)
       s2 = vis.xContext.invert(s2)
       if (!selection) 
         {
         vis.brushed(null)
-      }else if(s1 != vis.config.margin.left || s2 != vis.width){
+      }else if(selection[0]  != vis.config.margin.left || selection[1]  != vis.width){
           vis.refresh(s1,s2)
           vis.static == false
       }
-      else if(s1 == vis.config.margin.left && s2 == vis.width && vis.static == false){
+      else if(selection[0]  == vis.config.margin.left && selection[1]  == vis.width && vis.static == false){
           vis.refresh(s1,s2)
           vis.static == true
       }
