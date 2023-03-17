@@ -16,6 +16,8 @@ let currentFilters = [["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "
     "45220","45223","45224","45225","45226","45227","45229","45230","45232","45233","45237","45238","45239","45248"]]
 let minDate = new Date(2021,0,1); 
 let maxDate = new Date(2023,0,2); 
+let histogramRefresh = [-1,-1];
+let lineRefresh = [-1,-1];
 //Data is split into 2 files to reduce file size for GitHub upload. 
 //Read first half:
 d3.csv('data/311_data_pt_1.csv')
@@ -162,7 +164,7 @@ d3.csv('data/311_data_pt_2.csv')
     map = new LeafletMap({parentElement: '#my-map'}, getMapData(data), background_Url, background_Attr, (filteredData) => {
       // only if filteredData is not null or undefined
       var loading = document.getElementById("loading");
-      console.log("Map filter Data!")
+      //console.log("Map filter Data!")
       loading.classList.add("loading");
       setTimeout(function() { // Dont use updateCharts() because it will also update map
         if (filteredData) {
@@ -191,25 +193,7 @@ d3.csv('data/311_data_pt_2.csv')
       'containerHeight': window.innerHeight/4.6,
       'containerWidth': window.innerWidth/2.26,
       }, getLineData(data),(filterDate1,filterDate2) => {
-          var filteredData = data;
-          filteredData = filteredData.filter(d => new Date(d.REQUESTED_DATETIME) > filterDate1)
-          filteredData = filteredData.filter(d => new Date(d.REQUESTED_DATETIME) < filterDate2)
-          var loading = document.getElementById("loading");
-        loading.classList.add("loading");
-        setTimeout(function() {
-        map.data = getMapData(data);
-        zipChart.data = getZip(filteredData);
-        //histogram.data = filteredData;
-        agencyChart.data = getAgency(filteredData);
-        daysOfTheWeek.data = getDayOfWeekData(filteredData);
-        map.updateVis();
-        zipChart.updateVis();
-        //histogram.updateVis();
-        agencyChart.updateVis();
-        daysOfTheWeek.updateVis();
-        loading.classList.remove("loading");
-      }, 100);
-        //data = filteredData;
+           lineRefresh = [filterDate1,filterDate2]
     }); 
 
     //Create days of the week chart:
@@ -266,24 +250,8 @@ d3.csv('data/311_data_pt_2.csv')
       'containerHeight': window.innerHeight/4.6,
       'containerWidth': window.innerWidth/2.26,
       }, data,(filterDate1,filterDate2) => {
+        histogramRefresh = [filterDate1,filterDate2]
 
-        var filteredData = data;
-        filteredData = filteredData.filter(d => d.dateDifHist >= Math.floor(filterDate1))
-        filteredData = filteredData.filter(d => d.dateDifHist <= Math.ceil(filterDate2))
-        var loading = document.getElementById("loading");
-        loading.classList.add("loading");
-        setTimeout(function() {
-        map.data = getMapData(data);
-        zipChart.data = getZip(filteredData);
-        agencyChart.data = getAgency(filteredData);
-        daysOfTheWeek.data = getDayOfWeekData(filteredData);
-        map.updateVis();
-        zipChart.updateVis();
-        agencyChart.updateVis();
-        daysOfTheWeek.updateVis();
-        loading.classList.remove("loading");
-      }, 100);
-        //data = filteredData;
     }); 
 
     //Create Zipcode chart
@@ -437,7 +405,46 @@ var toggle = false; // Toggle brush on and off
     // Also noticed if I put a console.log in any of the barcharts get() data functions (such as getZip, getAgency, etc)
     // the console.log is called twice, so they are being loaded twice when the site is first loaded.
 	});
-
+d3.selectAll('#applyHistogram').on('click', function() {
+        data = data.filter(d => d.dateDifHist >= Math.floor(histogramRefresh[0]))
+        data = data.filter(d => d.dateDifHist <= Math.ceil(histogramRefresh[1]))
+        var loading = document.getElementById("loading");
+        loading.classList.add("loading");
+        setTimeout(function() {
+          mapData = data;
+        map.data = getMapData(data);
+        zipChart.data = getZip(data);
+        agencyChart.data = getAgency(data);
+        daysOfTheWeek.data = getDayOfWeekData(data);
+        lineChart.data = getLineData(data);
+        lineChart.updateVis();
+        map.updateVis();
+        zipChart.updateVis();
+        agencyChart.updateVis();
+        daysOfTheWeek.updateVis();
+        loading.classList.remove("loading");
+      }, 100);
+  });
+d3.selectAll('#applyTimeline').on('click', function() {
+        data = data.filter(d => new Date(d.REQUESTED_DATETIME) > lineRefresh[0])
+        data = data.filter(d => new Date(d.REQUESTED_DATETIME) < lineRefresh[1])
+        var loading = document.getElementById("loading");
+        loading.classList.add("loading");
+        setTimeout(function() {
+          mapData = data;
+        map.data = getMapData(data);
+        zipChart.data = getZip(data);
+        histogram.data = data;
+        agencyChart.data = getAgency(data);
+        daysOfTheWeek.data = getDayOfWeekData(data);
+        map.updateVis();
+        zipChart.updateVis();
+        histogram.updateVis();
+        agencyChart.updateVis();
+        daysOfTheWeek.updateVis();
+        loading.classList.remove("loading");
+      }, 100);
+  });
 function updateCharts(){
   var loading = document.getElementById("loading");
   loading.classList.add("loading");
@@ -473,6 +480,7 @@ function updateCharts(){
 //function to reset charts to originl data
 function resetCharts(){
     let returnData = []
+    currentFilters = baseFilters
 
     var loading = document.getElementById("loading");
     loading.classList.add("loading");
@@ -760,9 +768,9 @@ function dayOfTheYear(dateString){
 }
 
 function getLineData(thisData){
-    //console.log(data)
+    ////console.log(data)
     //lets compute costs per year for the line chart
-    console.log("line chart data!")
+    //console.log("line chart data!")
     let requestsPerDay = [];
     for(var i = 0; i < 731; i++){
       requestsPerDay.push( {"day": i, "num":0});
@@ -785,7 +793,7 @@ function getLineData(thisData){
 
 //Function to get day of week data
 function getDayOfWeekData(thisData){
-  console.log("Day of Week Reset")
+  //console.log("Day of Week Reset")
     var returnData = []
     returnData.push({"day":"Monday","count":0})
     returnData.push({"day":"Tuesday","count":0})
