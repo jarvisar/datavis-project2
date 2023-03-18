@@ -1,5 +1,6 @@
 .first-row-container{
-  height: 45%;
+  height: 51%;
+  overflow: hidden;
 }
 
 /* Set height and width for map and map container */
