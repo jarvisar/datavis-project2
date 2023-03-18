@@ -139,7 +139,7 @@ hr.rounded {
 
 /* Vertical divider style */
 .line-divider {
-  height: calc(100% - 5px);
+  height: calc(100% - 7px);
   width: 7px;
   background-color: #666;
   border-radius: 3px;
@@ -342,9 +342,7 @@ hr.rounded {
 
 /* Bar chart container */
 .svg-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 0px;
+  display:flex;
   height: calc(50% - 20px);
 }
 
