@@ -289,7 +289,7 @@ d3.csv('data/311_data_pt_2.csv')
 
     loading.classList.remove("loading"); // Remove loading message
 
-  }, 100) // Use setTimeout to delay the loading message (prevent null classlist error)
+  }, 120) // Use setTimeout to delay the loading message (prevent null classlist error)
 })
 .catch(error => console.error(error));
 
