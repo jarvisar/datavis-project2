@@ -1,5 +1,5 @@
 .first-row-container{
-  height: calc(50% - 20px);
+  height: calc(60% - 20px);
   overflow: hidden;
 }
 
@@ -343,7 +343,7 @@ hr.rounded {
 /* Bar chart container */
 .svg-container {
   display:flex;
-  height: calc(50% - 20px);
+  height: calc(40% - 20px);
 }
 
 #loading {
