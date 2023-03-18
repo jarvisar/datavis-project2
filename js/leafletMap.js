@@ -14,6 +14,7 @@ class LeafletMap {
     this.background_Url = _background_Url
     this.background_Attr = _background_Attr
     this.brushEnabled = false; // brush disabled by default
+    this.heatmapEnabled = false; // heatmap disabled by default
     this.filteredData
     this.initVis();
   }
@@ -131,7 +132,7 @@ class LeafletMap {
     
     //handler here for updating the map, as you zoom in and out           
     vis.theMap.on("zoomend", function(){
-      vis.updateVis(vis.brushEnabled);
+      vis.updateVis(vis.brushEnabled, vis.heatmapEnabled);
     });
 
     vis.brush = d3.brush()
@@ -236,11 +237,13 @@ class LeafletMap {
       vis.refresh(vis.filteredData);
     }
   }
-  // if not null
+  // if not null, remove heatmap layer
   if (vis.heatmapLayer){
     // remove heatmap layer
     vis.theMap.removeLayer(vis.heatmapLayer);
   }
+
+  // add heatmap if enabled
   if (heatmapEnabled == true){
     vis.heatmapLayer = L.heatLayer([], {
       radius: 10,
@@ -248,7 +251,7 @@ class LeafletMap {
       maxZoom: 13,
       gradient: {0.1: 'blue', 0.35: 'lime', 1: 'red'}
     }).addTo(vis.theMap);
-
+    vis.heatmapEnabled = true;
     // remove dots
     vis.Dots.remove();
 
