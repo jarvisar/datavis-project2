@@ -392,8 +392,8 @@ function getMapData(thisData){
 
 	d3.selectAll('.toggle-brush-button').on('click', function() {
 		if (brushEnabled == false){
-			map.updateVis(brushEnabled, heatmapEnabled);
-			brushEnabled = true
+			map.updateVis(true, false);
+			brushEnabled = true;
 		} else if (brushEnabled == true) {
       map.updateVis(false, heatmapEnabled);
 			brushEnabled = false
