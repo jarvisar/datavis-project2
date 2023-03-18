@@ -11,7 +11,7 @@
 	<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
     
 </head>
-<body style="overflow-x: hidden; height: 98vh; width: 99vw;"> 
+<body style="overflow-x: hidden; height: 98vh; width: calc(100vw - 15px);"> 
     <div id="loading">Loading...</div>
     <!-- Container for reset button -->
 
@@ -24,8 +24,8 @@
     <!-- Container for Info -->
     <div style="width: 100%; text-align: center; position: relative; height: 139px; margin-top: -20px;" style="overflow-x: hidden;">
         <button id="button1" class="cool-button" style="position: absolute; bottom: 10px; left: 5px;" onclick="resetCharts()"/> Reset Charts </button>
-        <p id="name" style="font-family: Roboto; color: #444; position: absolute; bottom: 20px; left: 190px; pointer-events: none;"> Select any bar/label in bar charts to filter data </p> 
-        <p style="font-family: Roboto; color: #444; position: absolute; bottom: 0px; left: 190px; pointer-events: none;"> Use reset button to reset data filters.</p>
+        <p id="name" style="font-family: Roboto; color: #444; position: absolute; bottom: 20px; left: 190px; pointer-events: none;"> Select any bar/label in the bar charts to filter data </p> 
+        <p style="font-family: Roboto; color: #444; position: absolute; bottom: 0px; left: 190px; pointer-events: none;"> Use the reset button to reset data filters.</p>
         <div class="title-container" style="text-align: center; color: #444">
             <h1 id = "title" style="font-family: Roboto; margin-bottom: 10px">Who you gonna call? 3-1-1!</h1>
             <p id = "name" style="font-family: Roboto; margin-bottom: 5px; margin-top: 0px">by Adam Jarvis & Ryan Logsdon</p> 
@@ -136,14 +136,14 @@
         <!-- Bar charts -->
         <div class="svg-container">
             <svg id="daysOfTheWeek"></svg>
+            <div class="line-divider"></div>
             <svg id="agency"></svg>
+            <div class="line-divider"></div>
             <div class="source">
-                <svg id="zipcode"></svg>
-                <!--<p style="text-align: center; font-family: Roboto">
-                Click to view: <a href="https://www.zipdatamaps.com/zipcodes-cincinnati-oh" target="_blank">Cincinnati Zipcode Map</a>
-                </p> -->
+              <svg id="zipcode"></svg>
             </div>
-        </div>
+            
+          </div>
     </div>
     
 
