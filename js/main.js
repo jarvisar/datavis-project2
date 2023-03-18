@@ -189,14 +189,18 @@ d3.csv('data/311_data_pt_2.csv')
     });
     updateMapColor();
 
+    // get .first-row-container height
+    var firstRowContainer = document.getElementsByClassName("first-row-container");
+    var firstRowContainerHeight = firstRowContainer.item(0).clientHeight - 5;
     //Create Line chart
     lineChart = new Line({
       'parentElement': '#timeline',
-      'containerHeight': window.innerHeight/4.6,
+      'containerHeight': firstRowContainerHeight/2,
       'containerWidth': window.innerWidth/2.26,
       }, getLineData(data),(filterDate1,filterDate2) => {
            lineRefresh = [filterDate1,filterDate2]
     }); 
+    console.log(firstRowContainerHeight/2)
 
     //Create days of the week chart:
     daysOfTheWeek = new DaysOfTheWeek({
@@ -249,7 +253,7 @@ d3.csv('data/311_data_pt_2.csv')
     //Create histogram
     histogram = new Histogram({
       'parentElement': '#histogram',
-      'containerHeight': window.innerHeight/4.6,
+      'containerHeight': firstRowContainerHeight/2,
       'containerWidth': window.innerWidth/2.26,
       }, data,(filterDate1,filterDate2) => {
         histogramRefresh = [filterDate1,filterDate2]
