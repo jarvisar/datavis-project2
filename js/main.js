@@ -192,6 +192,11 @@ d3.csv('data/311_data_pt_2.csv')
     // get .first-row-container height
     var firstRowContainer = document.getElementsByClassName("first-row-container");
     var firstRowContainerHeight = firstRowContainer.item(0).clientHeight - 5;
+
+    // get .svg-container height
+    var svgContainer = document.getElementsByClassName("svg-container");
+    var svgContainerHeight = svgContainer.item(0).clientHeight - 5;
+
     //Create Line chart
     lineChart = new Line({
       'parentElement': '#timeline',
@@ -205,7 +210,7 @@ d3.csv('data/311_data_pt_2.csv')
     //Create days of the week chart:
     daysOfTheWeek = new DaysOfTheWeek({
       'parentElement': '#daysOfTheWeek',
-      'containerHeight': window.innerHeight/2.7,
+      'containerHeight': svgContainerHeight,
       'containerWidth': window.innerWidth/3.8,
       }, getDayOfWeekData(data),(filterData) => {
           if(currentFilters[0].length == 7){
@@ -229,7 +234,7 @@ d3.csv('data/311_data_pt_2.csv')
     //Create Agency chart
     agencyChart = new AgencyType({
       'parentElement': '#agency',
-      'containerHeight': window.innerHeight/2.7,
+      'containerHeight': svgContainerHeight,
       'containerWidth': window.innerWidth/3.8,
       }, getAgency(data),(filterData) => {
         if(currentFilters[1].length == 10){
@@ -263,7 +268,7 @@ d3.csv('data/311_data_pt_2.csv')
     //Create Zipcode chart
     zipChart = new Zipcode({
       'parentElement': '#zipcode',
-      'containerHeight': window.innerHeight/2.7,
+      'containerHeight': svgContainerHeight,
       'containerWidth': window.innerWidth/2.13,
       }, getZip(data),(filterData) => {
         if(currentFilters[2].length == 30){

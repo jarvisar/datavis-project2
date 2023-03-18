@@ -1,5 +1,5 @@
 .first-row-container{
-  height: 49%;
+  height: calc(50% - 20px);
   overflow: hidden;
 }
 
@@ -345,6 +345,7 @@ hr.rounded {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 0px;
+  height: calc(50% - 20px);
 }
 
 #loading {
