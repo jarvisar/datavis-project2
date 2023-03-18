@@ -49,8 +49,8 @@ class LeafletMap {
     });
 
      vis.theMap = L.map('my-map', {
-      center: [39.1231, -84.5120],
-      zoom: 11,
+      center: [39.1431, -84.5120],
+      zoom: 12,
       layers: [vis.base_layer]
     });
 
