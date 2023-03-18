@@ -713,10 +713,19 @@ function updateMapColor(){
         }
       }
     }
+    else if(dropdownValue == "option5"){
+      document.getElementById("option1-legend").style.display = "none";
+      document.getElementById("option2-legend").style.display = "none";
+      document.getElementById("option3-legend").style.display = "none";
+      document.getElementById("option4-legend").style.display = "none";
+
+        map.updateVis(false, true);
+        return;
+    }
 
     data = returnData;
     map.data = returnData;
-    map.updateVis(false); // disable brush by default
+    map.updateVis(false, false); // disable brush by default
   }
 
   function updateMapType(){

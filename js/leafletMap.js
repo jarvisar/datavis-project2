@@ -177,7 +177,7 @@ class LeafletMap {
 
 
 
-  updateVis(brushEnabled) {
+  updateVis(brushEnabled, heatmapEnabled) {
     let vis = this;
     //want to see how zoomed in you are? 
     // console.log(vis.map.getZoom()); //how zoomed am I
@@ -207,25 +207,20 @@ class LeafletMap {
     });
 
   vis.theMap.addLayer(vis.base_layer);
-  vis.Dots.attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
-                    .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
+
+  if (heatmapEnabled != true){
+    vis.Dots.attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
+    .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
     //redraw dots with correct position and map color
     vis.Dots = vis.svg.selectAll('circle')
-                    .data(vis.data) 
-                    .join('circle')
-                    .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
-                    .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
-                    .attr("r", vis.radiusSize)
-                    .attr("fill", d => d.mapColor)
-                    .attr("stroke", "black") ;
-
-  
-
-  // Uncomment this to enable brush. Currently disabled because it prevents tooltips from appearing
-  // Maybe add toggle button to toggle brush?
-  // vis.svg.append("g")
-  //   .attr("class", "brush")
-  //   .call(vis.brush);
+      .data(vis.data) 
+      .join('circle')
+      .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
+      .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
+      .attr("r", vis.radiusSize)
+      .attr("fill", d => d.mapColor)
+      .attr("stroke", "black") ;
+  }
 
   if (brushEnabled == true) {
     // enable the brush
@@ -241,9 +236,29 @@ class LeafletMap {
       vis.refresh(vis.filteredData);
     }
   }
-
-    
+  // if not null
+  if (vis.heatmapLayer){
+    // remove heatmap layer
+    vis.theMap.removeLayer(vis.heatmapLayer);
   }
+  if (heatmapEnabled == true){
+    vis.heatmapLayer = L.heatLayer([], {
+      radius: 10,
+      blur: 15,
+      maxZoom: 13,
+      gradient: {0.1: 'blue', 0.35: 'lime', 1: 'red'}
+    }).addTo(vis.theMap);
+
+    // remove dots
+    vis.Dots.remove();
+
+    let heatmapPoints = vis.data.map(d => [d.latitude, d.longitude]);
+
+    // set heatmap layer data
+    vis.heatmapLayer.setLatLngs(heatmapPoints);
+  }
+
+}
 
 
   renderVis() {
