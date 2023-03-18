@@ -144,8 +144,18 @@ class Line {
         const xTickFormat = d3.timeFormat('%B %d, %Y');
 
         // Initialize axes
-        vis.xAxisFocus = d3.axisBottom(vis.xScaleFocus).ticks(5).tickFormat((d, i) => xTickFormat(new Date(startDate.getTime() + (d - 1) * 24 * 60 * 60 * 1000)));
-        vis.xAxisContext = d3.axisBottom(vis.xScaleContext).ticks(5).tickFormat((d, i) => xTickFormat(new Date(startDate.getTime() + (d - 1) * 24 * 60 * 60 * 1000)));
+        vis.xAxisFocus = d3.axisBottom(vis.xScaleFocus)
+            .ticks(6)
+            .tickFormat((d, i) => {
+                const date = new Date(startDate.getTime() + (d - 1) * 24 * 60 * 60 * 1000);
+                return d3.timeFormat("%b %e, %y")(date);
+            });
+        vis.xAxisContext = d3.axisBottom(vis.xScaleContext)
+            .ticks(6)
+            .tickFormat((d, i) => {
+                const date = new Date(startDate.getTime() + (d - 1) * 24 * 60 * 60 * 1000);
+                return d3.timeFormat("%b %e, %y")(date);
+            });
         vis.yAxisFocus = d3.axisLeft(vis.yScaleFocus).ticks(5);
 
 
