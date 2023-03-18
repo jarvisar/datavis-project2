@@ -192,6 +192,7 @@ class LeafletMap {
     //   desiredMetersForPoint = 100; //or the uncertainty measure... =) 
     //   radiusSize = desiredMetersForPoint / metresPerPixel;
     // }
+    
    
    //update background:
     vis.base_layer = L.tileLayer(vis.background_Url, {
@@ -220,7 +221,64 @@ class LeafletMap {
       .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
       .attr("r", vis.radiusSize)
       .attr("fill", d => d.mapColor)
-      .attr("stroke", "black") ;
+      .attr("stroke", "black")
+      .on('mouseover', function(event,d) { //function to add mouseover event
+        d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
+          .duration('150') //how long we are transitioning between the two states (works like keyframes)
+          .attr('r', 7); //change radius
+
+          //get values and check if blank, if so set to N/A
+          var reqID = d.SERVICE_REQUEST_ID
+          var reqDate = d.REQUESTED_DATETIME
+          var upDate = d.UPDATED_DATETIME
+          var agency = d.AGENCY_RESPONSIBLE
+          var service = d.SERVICE_NAME
+          var desc = d.DESCRIPTION
+
+          reqID = reqID || "N/A";
+          reqDate = reqDate || "N/A";
+          upDate = upDate || "N/A";
+          agency = agency || "N/A";
+          service = service || "N/A";
+          desc = (desc && desc.trim() !== '' && desc !== '"Request entered through the Web. Refer to Intake Questions for further description."') ? desc : "N/A";
+
+
+        //create a tool tip
+        d3.select('#tooltip')
+            .style("display","block")
+            .style('z-index', 1000000)
+              // Format number with million and thousand separator
+            .html(`<div class="tooltip-title"><b>Service Request ID: ${reqID}</b></div>
+                      <ul>
+                        <li>Date of Call: ${reqDate}</li>
+                        <li>Updated Date: ${upDate}</li>
+                        <li>Agency: ${agency}</li>
+                        <li>Call Type: ${service}</li>
+                        <li>Description: ${desc}</li>
+                      </ul>`);
+
+                        })
+                      .on('mousemove', (event) => {
+                          //position the tooltip
+                          d3.select('#tooltip')
+                           .style('left', (event.pageX + 10) + 'px')   
+                            .style('top', (event.pageY + 10) + 'px');
+                       })              
+                      .on('mouseleave', function() { //function to add mouseover event
+                          d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
+                            .duration('150') //how long we are transitioning between the two states (works like keyframes)
+                            .attr('r', 3) //change radius
+
+                          d3.select('#tooltip').style('display', 'none');//turn off the tooltip
+
+                        })
+                      .on('click', (event, d) => { //experimental feature I was trying- click on point and then fly to it
+                         // vis.newZoom = vis.theMap.getZoom()+2;
+                         // if( vis.newZoom > 18)
+                         //  vis.newZoom = 18; 
+                         // vis.theMap.flyTo([d.latitude, d.longitude], vis.newZoom);
+                        });
+   ;
   }
 
   if (brushEnabled == true) {
