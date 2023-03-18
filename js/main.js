@@ -512,8 +512,7 @@ function resetCharts(){
 
       //reset map -- update vis is always called when the color is updated
       data = globalData;
-      updateMapColor();
-
+      updateMapColor(true);
 
       //TO-DO
       lineChart.data = getLineData(globalData);
@@ -534,7 +533,7 @@ function resetCharts(){
 
 
   //function to reset charts to originl data
-function updateMapColor(){
+function updateMapColor(reset){
     let returnData = []
     var thisData = data;
     //get value
@@ -729,7 +728,12 @@ function updateMapColor(){
 
     data = returnData;
     map.data = returnData;
-    map.updateVis(brushEnabled, heatmapEnabled); // disable brush by default
+    if (reset == true){
+      map.updateVis(false, heatmapEnabled);
+      brushEnabled = false; // If reset is true, then disable brush
+    } else {
+      map.updateVis(brushEnabled, heatmapEnabled);
+    }
   }
 
   function updateMapType(){
