@@ -3,6 +3,8 @@ var globalData =[];
 let mapData;
 let data;
 let map;
+let brushEnabled = false; // Keep track of map brush and heatmap state
+let heatmapEnabled = false;
 let background_Url = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
 let background_Attr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 let daysOfTheWeek, lineChart, agencyChart, zipChart;
@@ -371,7 +373,7 @@ d3.selectAll('.legend-btn').on('click', function() {
   returnData = returnData.filter(d => selectedCategory.includes(d.mapColor));
   // Filter data accordingly and update vis
   map.data = returnData;
-  map.updateVis();
+  map.updateVis(brushEnabled, heatmapEnabled);
 
 });
 
@@ -388,14 +390,13 @@ function getMapData(thisData){
   return returnData
 }
 
-var toggle = false; // Toggle brush on and off
 	d3.selectAll('.toggle-brush-button').on('click', function() {
-		if (toggle == false){
-			map.updateVis(true);
-			toggle = true
-		} else if (toggle == true) {
-      map.updateVis(false);
-			toggle = false
+		if (brushEnabled == false){
+			map.updateVis(brushEnabled, heatmapEnabled);
+			brushEnabled = true
+		} else if (brushEnabled == true) {
+      map.updateVis(false, heatmapEnabled);
+			brushEnabled = false
 		}
 
     // NOTE: Currently the brush works at filtering the data, but for some reason
@@ -418,7 +419,7 @@ d3.selectAll('#applyHistogram').on('click', function() {
         daysOfTheWeek.data = getDayOfWeekData(data);
         lineChart.data = getLineData(data);
         lineChart.updateVis();
-        map.updateVis();
+        map.updateVis(brushEnabled, heatmapEnabled);
         zipChart.updateVis();
         agencyChart.updateVis();
         daysOfTheWeek.updateVis();
@@ -437,7 +438,7 @@ d3.selectAll('#applyTimeline').on('click', function() {
         histogram.data = data;
         agencyChart.data = getAgency(data);
         daysOfTheWeek.data = getDayOfWeekData(data);
-        map.updateVis();
+        map.updateVis(brushEnabled, heatmapEnabled);
         zipChart.updateVis();
         histogram.updateVis();
         agencyChart.updateVis();
@@ -472,7 +473,7 @@ function updateCharts(){
     histogram.updateVis();
     agencyChart.updateVis();
     daysOfTheWeek.updateVis();
-    map.updateVis();
+    map.updateVis(brushEnabled, heatmapEnabled);
     loading.classList.remove("loading");
   }, 100);
 }
@@ -593,6 +594,7 @@ function updateMapColor(){
           returnData.push(thisData[obj])
         }
       }
+      heatmapEnabled = false;
     }
     else if(dropdownValue == "option2"){
       //time between
@@ -620,7 +622,7 @@ function updateMapColor(){
         thisData[obj].mapColor = colorScale(dateDifference)
         returnData.push(thisData[obj])
       }
-
+      heatmapEnabled = false;
 
     }
     else if(dropdownValue == "option3"){
@@ -657,6 +659,7 @@ function updateMapColor(){
         thisData[obj].mapColor = colorScale(dayOfYear)
         returnData.push(thisData[obj])
       }
+      heatmapEnabled = false;
     }
     else if(dropdownValue == "option4"){
       document.getElementById("option1-legend").style.display = "none";
@@ -712,20 +715,21 @@ function updateMapColor(){
           returnData.push(thisData[obj])
         }
       }
+      heatmapEnabled = false;
     }
     else if(dropdownValue == "option5"){
       document.getElementById("option1-legend").style.display = "none";
       document.getElementById("option2-legend").style.display = "none";
       document.getElementById("option3-legend").style.display = "none";
       document.getElementById("option4-legend").style.display = "none";
-
-        map.updateVis(false, true);
-        return;
+      heatmapEnabled = true;
+      map.updateVis(brushEnabled, heatmapEnabled);
+      return;
     }
 
     data = returnData;
     map.data = returnData;
-    map.updateVis(false, false); // disable brush by default
+    map.updateVis(brushEnabled, heatmapEnabled); // disable brush by default
   }
 
   function updateMapType(){
@@ -749,7 +753,7 @@ function updateMapColor(){
     };
     map.background_Url = backgrounds[dropdownValue].Url;
     map.background_Attr = backgrounds[dropdownValue].Attr;
-    map.updateVis();
+    map.updateVis(brushEnabled, heatmapEnabled);
     
   }
 
