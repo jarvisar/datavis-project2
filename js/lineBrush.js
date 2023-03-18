@@ -35,11 +35,10 @@ class Line {
     //Title
     vis.svg.append("text")
        .attr('transform', `translate(${(vis.width - vis.config.margin.left - vis.config.margin.right)/2.1}, ${vis.config.margin.top -20 })`)
-       .attr("font-size", "20px")
        .text("Calls Placed Over 2022")
        .style("font-family", "Roboto")
         .style("color", "black")
-        .style("font-size", "20px");
+        .style("font-size", "18px");
     // X axis Label    
     vis.svg.append("text")
        .attr("transform", `translate(${(vis.width)/1.8},${vis.height + vis.config.margin.bottom + 25})`)
