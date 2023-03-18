@@ -205,7 +205,15 @@ d3.csv('data/311_data_pt_2.csv')
       }, getLineData(data),(filterDate1,filterDate2) => {
            lineRefresh = [filterDate1,filterDate2]
     }); 
-    console.log(firstRowContainerHeight/2)
+    
+    //Create histogram
+    histogram = new Histogram({
+      'parentElement': '#histogram',
+      'containerHeight': firstRowContainerHeight/2,
+      'containerWidth': window.innerWidth/2.26,
+      }, data,(filterDate1,filterDate2) => {
+        histogramRefresh = [filterDate1,filterDate2]
+    }); 
 
     //Create days of the week chart:
     daysOfTheWeek = new DaysOfTheWeek({
@@ -253,16 +261,6 @@ d3.csv('data/311_data_pt_2.csv')
           currentFilters[1].push(filterData)
         }
         updateCharts();
-    }); 
-
-    //Create histogram
-    histogram = new Histogram({
-      'parentElement': '#histogram',
-      'containerHeight': firstRowContainerHeight/2,
-      'containerWidth': window.innerWidth/2.26,
-      }, data,(filterDate1,filterDate2) => {
-        histogramRefresh = [filterDate1,filterDate2]
-
     }); 
 
     //Create Zipcode chart
