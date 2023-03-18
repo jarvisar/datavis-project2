@@ -211,6 +211,7 @@ class LeafletMap {
   vis.theMap.addLayer(vis.base_layer);
 
   if (heatmapEnabled != true){
+    vis.heatmapEnabled = false;
     vis.Dots.attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
     .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
     //redraw dots with correct position and map color
