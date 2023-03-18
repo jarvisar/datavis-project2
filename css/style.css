@@ -1,14 +1,18 @@
+.first-row-container{
+  height: 45%;
+}
+
 /* Set height and width for map and map container */
 #my-map {
   width: 100%;
-  height: 375px;
   z-index: 9;
+  height: calc(100% - 50px);
 }
 #my-map-container {
   width: 55%;
-  height: 420px;
   margin-bottom: 5px;
   position: relative;
+  height: 100%;
 }
 
 /* Set tool tip style */
@@ -67,13 +71,9 @@ hr.rounded {
 
 /* set width for title and reset button */
 .top-container {
-     width: 40%;
        margin: 0 auto;
 }
-.title-container {
-     width: 21%;
-       margin: 0 auto;
-}
+
 .info-container {
      width: 38%;
        margin: 0 auto;
@@ -82,8 +82,20 @@ hr.rounded {
 /* Set width for timeline */
 
 .timeline-container {
-  width: 33.33%;
+  width: 43%;
   margin: 0 auto;
+}
+
+#applyTimeline{
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#applyHistogram{
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 /* Reset button style */
@@ -126,8 +138,8 @@ hr.rounded {
 
 /* Vertical divider style */
 .line-divider {
-  height: 44vh;
-  width: 8px;
+  height: calc(100% - 5px);
+  width: 7px;
   background-color: #666;
   border-radius: 3px;
   display: inline-block;

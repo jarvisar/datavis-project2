@@ -9,41 +9,36 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'> 
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    
 </head>
-<body style="overflow-x: hidden"> 
+<body style="overflow-x: hidden; height: 100vh; width: 100vw;"> 
     <div id="loading">Loading...</div>
     <!-- Container for reset button -->
-    <div class="top-container">
-      <div style= "display: flex; flex-wrap: nowrap; justify-content: left; margin-left: 30px;">
-        <button id = "button1" class="cool-button" onclick="resetCharts()"/> Reset Charts </button>
-        <div style= "display: flex; justify-content: left; flex-wrap: wrap;">
-            <p id = "name" style="font-family: Roboto;margin-left: 30px;margin-top: 24px;align-self: center;color: #444;"> Select a bar or label in any bar chart to filter data. </p> 
-            <p style="font-family: Roboto;margin-left: 30px; margin-top: 0px;align-self: center;color: #444;"> Use this button to reset data filters.</p> 
-        </div>  
-      </div>  
-    </div>
+
 	<!-- GitHub Button --> 
 	<a aria-label="Source Code" target="_blank" rel="noopener" href="https://github.com/jarvisar/datavis-project2/" title="Project Source Code" style="position: absolute; top: 10px; right: 10px;">
 		<img style="margin-right: 10px;" width="40" alt="GitHub Logo" src="images/github.png" />
 	</a>
     <!-- Container for Title -->
-    <div class="title-container" style="text-align: center; color: #444">
-        <h1 id = "title" style="font-family: Roboto; margin-bottom: 10px">Who you gonna call? 3-1-1!</h1>
-        <p id = "name" style="font-family: Roboto; margin-bottom: 5px; margin-top: 0px">by Adam Jarvis & Ryan Logsdon</p> 
-    </div>
 
     <!-- Container for Info -->
-    <div class="info-container" style="text-align: center; color: #444">
-        <p id = "name" style="font-family: Roboto;margin-left: 5%;margin-top: 5%;align-self: center;color: #444;"> 
-            Click to learn more about <a href="https://data.cincinnati-oh.gov/Thriving-Neighborhoods/Cincinnati-311-Non-Emergency-Service-Requests/4cjh-bm8b" target="_blank"> Cincinnati's Non-Emergency Request Line</a>
-            </p> </p> 
-    </div>
+    <div style="width: 100%; text-align: center; position: relative;" style="overflow-x: hidden;">
+        <button id="button1" class="cool-button" style="position: absolute; bottom: 0px; left: 5px;" onclick="resetCharts()"/> Reset Charts </button>
+        <p id="name" style="font-family: Roboto; color: #444; position: absolute; bottom: 20px; left: 190px; pointer-events: none;"> Select any bar/label in bar charts to filter data </p> 
+        <p style="font-family: Roboto; color: #444; position: absolute; bottom: 0px; left: 190px; pointer-events: none;"> Use reset button to reset data filters.</p>
+        <div class="title-container" style="text-align: center; color: #444">
+            <h1 id = "title" style="font-family: Roboto; margin-bottom: 10px">Who you gonna call? 3-1-1!</h1>
+            <p id = "name" style="font-family: Roboto; margin-bottom: 5px; margin-top: 0px">by Adam Jarvis & Ryan Logsdon</p> 
+        </div>
 
+        <p id = "name" style="font-family: Roboto; color: #444; font-size: 12px;"> Learn more about <a href="https://data.cincinnati-oh.gov/Thriving-Neighborhoods/Cincinnati-311-Non-Emergency-Service-Requests/4cjh-bm8b" target="_blank"> Cincinnati's Non-Emergency Request Line</a></p>
+    </div>
 
 
     <!-- Top line divider -->
     <hr class="rounded" style="margin-top: 0px;">
 
+    <div class="content" style="overflow-x: hidden; height: 100%">
     <!-- First row container-->
     <div class="first-row-container">
         <div id="my-map-container">
@@ -149,6 +144,8 @@
             </p> -->
         </div>
     </div>
+    </div>
+    
 
     <div id="tooltip"></div>
 
