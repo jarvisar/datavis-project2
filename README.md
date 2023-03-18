@@ -18,6 +18,8 @@ This project includes the following visualizations:
 
 - Leaflet Map: Users can view and interact with a map displaying individual 311 calls as markers.
 - Line chart: Users can view and interact with a timeline of 311 calls by month and time of year.
+- Histogram: Users can view and interact with a histogram showing the response time of calls with different bins based on how many days it took to respond to 311 call.
+- Bar charts: Users can view and interact with bar charts showing Calls by Day of the Week, Calls by Responding Agency, and Calls by ZIP code.
 
 
 # Usage
