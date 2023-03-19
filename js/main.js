@@ -399,7 +399,7 @@ function getMapData(thisData){
 
 	d3.selectAll('.toggle-brush-button').on('click', function() {
 		if (brushEnabled == false){
-			map.updateVis(true, false);
+			map.updateVis(true, heatmapEnabled);
 			brushEnabled = true;
 		} else if (brushEnabled == true) {
       map.updateVis(false, heatmapEnabled);
