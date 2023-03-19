@@ -31,7 +31,7 @@ class DaysOfTheWeek {
        .text("Calls by Day of the Week")
        .style("font-family", "Roboto")
         .style("color", "black")
-        .style("font-size", "20px");
+        .style("font-size", "18px");
 
     // X axis Label    
     vis.svg.append("text")

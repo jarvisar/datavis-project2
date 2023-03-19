@@ -344,6 +344,7 @@ hr.rounded {
 .svg-container {
   display:flex;
   height: calc(40% - 20px);
+  margin-top: -15px;
 }
 
 #loading {

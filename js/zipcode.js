@@ -31,7 +31,7 @@ class Zipcode {
        .text("Calls by ZIP Code")
        .style("font-family", "Roboto")
         .style("color", "black")
-        .style("font-size", "20px");
+        .style("font-size", "18px");
 
     // X axis Label    
     vis.svg.append("text")

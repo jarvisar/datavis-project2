@@ -24,11 +24,10 @@ class AgencyType {
     //Title
     vis.svg.append("text")
        .attr('transform', `translate(${vis.width/2.67}, ${vis.config.margin.top -20 })`)
-       .attr("font-size", "20px")
        .text("Calls by Responding Agency")
        .style("font-family", "Roboto")
         .style("color", "black")
-        .style("font-size", "20px");
+        .style("font-size", "18px");
 
     // X axis Label    
     vis.svg.append("text")
