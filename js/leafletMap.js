@@ -283,6 +283,7 @@ class LeafletMap {
   }
 
   if (brushEnabled == true) {
+    d3.selectAll(".brush").remove();
     // disable dragging on leaflet
     vis.theMap.dragging.disable();
     // enable the brush
