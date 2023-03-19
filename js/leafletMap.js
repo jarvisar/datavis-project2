@@ -304,11 +304,12 @@ class LeafletMap {
 
   // add heatmap if enabled
   if (heatmapEnabled == true){
+
     vis.heatmapLayer = L.heatLayer([], {
       radius: 10,
-      blur: 15,
+      blur: 25, // increased blur value
       maxZoom: 13,
-      gradient: {0.1: 'blue', 0.35: 'lime', 1: 'red'}
+      gradient: {0.1: 'blue', 0.2: 'green', 0.4: 'yellow', 0.6: 'orange', 0.8: 'red'} // more color stops for a smoother transition
     }).addTo(vis.theMap);
     vis.heatmapEnabled = true;
     // remove dots
