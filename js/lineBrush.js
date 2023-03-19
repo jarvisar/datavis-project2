@@ -35,7 +35,7 @@ class Line {
     //Title
     vis.svg.append("text")
        .attr('transform', `translate(${(vis.width - vis.config.margin.left - vis.config.margin.right)/2.1}, ${vis.config.margin.top -20 })`)
-       .text("Calls Placed Over 2022")
+       .text("Calls Placed Over Time")
        .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "18px");
