@@ -283,12 +283,16 @@ class LeafletMap {
   }
 
   if (brushEnabled == true) {
+    // disable dragging on leaflet
+    vis.theMap.dragging.disable();
     // enable the brush
     vis.svg.append("g")
       .attr("class", "brush")
       .call(vis.brush);
     vis.brushEnabled = true;
   } else if (brushEnabled == false){
+    // enable dragging on leaflet
+    vis.theMap.dragging.enable();
     // disable the brush
     d3.selectAll(".brush").remove();
     vis.brushEnabled = false;
