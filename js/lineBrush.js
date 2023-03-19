@@ -121,6 +121,7 @@ class Line {
             vis.yScaleFocus.domain([0,1]);
         }
         else{
+            vis.empty = false;
             vis.yScaleFocus.domain(d3.extent(vis.data, vis.yValue));
         }
         const startDate = new Date(2021,0,min + 2);
@@ -413,7 +414,7 @@ class Line {
       // Update x-scale of the focus view accordingly
       vis.xScaleFocus.domain(vis.selectedDomain);
       var yData = vis.data
-      var yMax = 0;
+      var yMax = 1;
       for(var i = Math.floor(vis.selectedDomain[0]); i < vis.selectedDomain[1]; i++){
         if(yData[i].num>yMax){
           yMax = yData[i].num
