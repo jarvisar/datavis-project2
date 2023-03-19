@@ -101,9 +101,9 @@ hr.rounded {
 
 /* Reset button style */
 .cool-button{
-	height: 60px;
-	width: 180px;
-  font-size: 24px;;
+	height: 50px;
+	width: 150px;
+  font-size: 20px;;
 	background-color: #118AB2;
 	color: #eaeaea;
 	border-radius: 10px;
