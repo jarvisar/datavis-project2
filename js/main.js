@@ -505,6 +505,7 @@ function resetCharts(){
       document.getElementById("option2-legend").style.display = "none";
       document.getElementById("option3-legend").style.display = "none";
       document.getElementById("option4-legend").style.display = "none";
+      document.getElementById("option5-legend").style.display = "none";
 
       // remove inactive from all legend buttons
       d3.selectAll('.legend-btn').classed('inactive', false); 
@@ -551,6 +552,7 @@ function updateMapColor(reset){
       document.getElementById("option2-legend").style.display = "none";
       document.getElementById("option3-legend").style.display = "none";
       document.getElementById("option4-legend").style.display = "none";
+      document.getElementById("option5-legend").style.display = "none";
       //Call type
       for(var obj in thisData){
         if(data[obj].latitude != null){
@@ -608,7 +610,7 @@ function updateMapColor(reset){
       document.getElementById("option2-legend").style.display = "inline-block";
       document.getElementById("option3-legend").style.display = "none";
       document.getElementById("option4-legend").style.display = "none";
-
+      document.getElementById("option5-legend").style.display = "none";
 
       var max = 30;
       var min = 0;
@@ -637,6 +639,7 @@ function updateMapColor(reset){
       document.getElementById("option2-legend").style.display = "none";
       document.getElementById("option3-legend").style.display = "inline-block";
       document.getElementById("option4-legend").style.display = "none";
+      document.getElementById("option5-legend").style.display = "none";
 
 
       //order it randomly so not all the new dates are plotted first then covered by older dates
@@ -672,6 +675,7 @@ function updateMapColor(reset){
       document.getElementById("option2-legend").style.display = "none";
       document.getElementById("option3-legend").style.display = "none";
       document.getElementById("option4-legend").style.display = "inline-block";
+      document.getElementById("option5-legend").style.display = "none";
       //agency
       for(var obj in thisData){
         if(data[obj].latitude != null){
@@ -728,6 +732,12 @@ function updateMapColor(reset){
       document.getElementById("option2-legend").style.display = "none";
       document.getElementById("option3-legend").style.display = "none";
       document.getElementById("option4-legend").style.display = "none";
+      document.getElementById("option5-legend").style.display = "inline-block";
+
+      const colorScale = d3.scaleLinear()
+        .domain([0, 0.2, 0.4, 0.6, 0.8])
+        .range(['blue', 'green', 'yellow', 'orange', 'red']);
+
       heatmapEnabled = true;
       map.updateVis(brushEnabled, heatmapEnabled);
       return;

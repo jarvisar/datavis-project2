@@ -247,6 +247,16 @@ hr.rounded {
       justify-content: space-between;
     }
 
+.option5-legend {
+  height: 50px;
+  width: 300px;
+  margin: 10px;
+  background: linear-gradient(to right,  lightblue, lime, yellow, orange, red);
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
 /* Legend 4 */
 .legend4 {
   margin: 20px 0;
