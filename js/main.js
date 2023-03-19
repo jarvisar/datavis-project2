@@ -430,6 +430,8 @@ d3.selectAll('#applyHistogram').on('click', function() {
         zipChart.updateVis();
         agencyChart.updateVis();
         daysOfTheWeek.updateVis();
+        histogram.data = data;
+        histogram.updateVis();
         loading.classList.remove("loading");
       }, 100);
   });
@@ -450,6 +452,8 @@ d3.selectAll('#applyTimeline').on('click', function() {
         histogram.updateVis();
         agencyChart.updateVis();
         daysOfTheWeek.updateVis();
+        lineChart.data = getLineData(data);
+        lineChart.updateVis();
         loading.classList.remove("loading");
       }, 100);
   });

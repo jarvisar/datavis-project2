@@ -259,12 +259,13 @@ vis.tooltipTrackingArea = vis.svg.append('rect')
       //do the same for the range
       // Convert given pixel coordinates (range: [x0,x1]) into a time period (domain: [Date, Date])
       var yData = vis.bins
-      var yMax = 0;
+      var yMax = 1;
       for(var i = Math.floor(vis.selectedDomain[0]); i < vis.selectedDomain[1]; i++){
         if(yData[i].length>yMax){
           yMax = yData[i].length
         }
       } 
+
       vis.y.domain([0,yMax]);
       
 
