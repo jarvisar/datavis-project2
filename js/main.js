@@ -525,8 +525,9 @@ function resetCharts(){
       //reset map -- update vis is always called when the color is updated
       data = globalData;
       updateMapColor(true);
+      // reset map zoom level
+      map.resetView();
 
-      //TO-DO
       lineChart.data = getLineData(globalData);
       zipChart.data = getZip(globalData);
       histogram.data = globalData;

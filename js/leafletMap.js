@@ -176,7 +176,10 @@ class LeafletMap {
 
   }
 
-
+  resetView(){
+    let vis = this;
+    vis.theMap.setView([39.1431, -84.5120], 12);
+  }
 
   updateVis(brushEnabled, heatmapEnabled) {
     let vis = this;
@@ -194,6 +197,8 @@ class LeafletMap {
     // }
     
    
+    // set map view
+
    //update background:
     vis.base_layer = L.tileLayer(vis.background_Url, {
       id: 'new-background',
